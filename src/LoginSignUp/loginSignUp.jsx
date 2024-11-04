@@ -24,13 +24,16 @@ const LoginSignUp = ({ onLogin }) => {
         username: name,
         password: password,
       });
-      console.log("Login successful, token:", result.data.token);
+    //   console.log("Login successful, token:", result.data.token);
+      var token = result.data.token;
+       // Store the token in localStorage for access across components
+         localStorage.setItem("token", token);
 
       // Call onLogin to update isLoggedIn in App
       onLogin();
 
     //   alert(`Success: ${result.data.token}`);
-      navigate('/'); // Redirect to the main page or desired route after login
+      navigate('/' ); // Redirect to the main page or desired route after login
 
     } catch (error) {
       if (error.response) {

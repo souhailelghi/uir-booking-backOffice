@@ -16,22 +16,14 @@ import UpdatePlanning from "./Pages/Plannigs/UpdatePlanning.jsx";
 import LoginSignUp from "./LoginSignUp/loginSignUp.jsx";
 
 function App() {
-  // Initialize isLoggedIn from localStorage
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
 
-  // Function to handle login and persist state
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true"); // Store login status in localStorage
-  };
-
-  // Function to handle logout and update localStorage
+  const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn"); // Clear login status from localStorage
   };
+
 
   return (
     <Router>
