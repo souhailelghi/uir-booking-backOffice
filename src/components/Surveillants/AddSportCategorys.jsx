@@ -3,15 +3,15 @@ import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const AddSurveillant = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+const AddSportCategorys = () => {
+  // const [firstName, setFirstName] = useState("");
+  const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!lastName ) {
+    if (!name ) {
       Swal.fire({
         title: "Assurez-vous de remplir tout!",
         icon: "error",
@@ -21,7 +21,7 @@ const AddSurveillant = () => {
 
     const formData = {
       mydate: "",
-      name: lastName,
+      name: name,
       image: "",
       description:"",
       dateCreation:"",
@@ -38,13 +38,13 @@ const AddSurveillant = () => {
       ); // Correct URL
       if (response.status === 200) {
         Swal.fire({
-          title: "Surveillant ajouté avec succès!",
+          title: " Sport Categorys ajouté avec succès!",
           icon: "success",
         });
         navigate("/Surveillants");
       } else {
         Swal.fire({
-          title: "Erreur lors de l'ajout du surveillant!",
+          title: "Erreur lors de l'ajout du Sport Categorys!",
           icon: "error",
         });
       }
@@ -79,7 +79,7 @@ const AddSurveillant = () => {
                     placeholder="Entrez  nom de Sport"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     required
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
               </div>
@@ -106,4 +106,4 @@ const AddSurveillant = () => {
   );
 };
 
-export default AddSurveillant;
+export default AddSportCategorys;

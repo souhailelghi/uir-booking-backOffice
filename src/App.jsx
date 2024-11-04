@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListReservation from "./components/Reservations/ListReservation.jsx";
 // import PlanningExam from "./components/Organism/PlanningExam";
 import SurveillantList from "./components/Surveillants/SurveillantList.jsx";
-import AddSurveillant from "./components/Surveillants/AddSurveillant.jsx";
 import UpdateSurveillant from "./components/Surveillants/UpdateSurveillant.jsx";
 import Header from "./components/Layouts/Header";
 import ExamResultsPage from "./Pages/ExamResultsPage";
@@ -13,16 +12,17 @@ import TestDetailPage from "./Pages/TestDetailPage";
 import TestStagiaireList from "./Pages/TestStagiaireListe";
 import Sidebar from "./components/Layouts/SideBar";
 import Planification from "./Pages/PlanificationPage";
-import AddRoom from "./Pages/Rooms/AddRoom";
 import RoomList from "./Pages/Rooms/RoomList";
 import UpdateRoom from "./Pages/Rooms/UpdateRoom";
 import PlanificationTestPage from "./Pages/Tests/PlanificationTest";
 import ListTest from "./Pages/Tests/ListTests";
 import EditTest from "./Pages/Tests/UpdateTest";
 import VaraintExamPage from "./Pages/VariantExams/VaraintExamPage.jsx";
-import AddNewVariant from "./Pages/VariantExams/AddNewVariant.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AddSportCategorys from "./components/Surveillants/AddSportCategorys.jsx";
+import AddRoom from "./Pages/Rooms/AddRoom";
 import PlaningsList from "./Pages/Rooms/PlaningsList";
+import AddNewVariant from "./Pages/VariantExams/AddNewVariant.jsx";
 import AddPlanningForm from "./Pages/Plannigs/AddPlanningForm";
 import UpdatePlanning from "./Pages/Plannigs/UpdatePlanning.jsx";
 
@@ -56,7 +56,7 @@ function App() {
               <Route path="/ListReservation" element={<ListReservation />} />
               {/* <Route path="/PlanningExam/Create" element={<PlanningExam />} /> */}
               <Route path="/Surveillants" element={<SurveillantList />} />
-              <Route path="/add-Surveillant" element={<AddSurveillant />} />
+              <Route path="/add-Surveillant" element={<AddSportCategorys />} />
               <Route path="/Update/:id" element={<UpdateSurveillant />} />
               <Route path="/Planification" element={<Planification />} />
               <Route path="/add-room" element={<AddRoom />} />
