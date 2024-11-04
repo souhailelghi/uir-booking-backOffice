@@ -35,7 +35,7 @@ const Sidebar = () => {
                 <ul className="mt-3 space-y-2">
                   <li>
                     <Link
-                      to="/PlanningExam"
+                      to="/ListReservation"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
                       <FaCalendarAlt className="text-gray-500" />

@@ -5,25 +5,25 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 
-function ListExam() {
-  const [exams, setExams] = useState([]);
+function ListReservation() {
+  const [reservations, setReservations] = useState([]);
   const [sportNames, setSportNames] = useState({});
   const [studentNames, setStudentNames] = useState({});
 
   useEffect(() => {
-    fetchExam();
+    fetchReservation();
   }, []);
 
-  const fetchExam = () => {
+  const fetchReservation = () => {
     ApiManager.get("/Reservations/list")
       .then((res) => {
-        setExams(res.data);
-        res.data.forEach((exam) => {
-          if (exam.sportId && !sportNames[exam.sportId]) {
-            fetchSportName(exam.sportId);
+        setReservations(res.data);
+        res.data.forEach((reservation) => {
+          if (reservation.sportId && !sportNames[reservation.sportId]) {
+            fetchSportName(reservation.sportId);
           }
-          if (exam.studentId && !studentNames[exam.studentId]) {
-            fetchStudentName(exam.studentId);
+          if (reservation.studentId && !studentNames[reservation.studentId]) {
+            fetchStudentName(reservation.studentId);
           }
         });
       })
@@ -56,14 +56,14 @@ function ListExam() {
     }
   };
 
-  const handleDelete = async (examId) => {
+  const handleDelete = async (reservationId) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
       try {
-        await ApiManager.delete(`/Exam/${examId}`);
-        fetchExam();
-        toast.success("Salle supprimée avec succès !");
+        await ApiManager.delete(`/Reservation/${reservationId}`);
+        fetchReservation();
+        toast.success("reservation supprimée avec succès !");
       } catch (error) {
-        toast.error("Erreur lors de la suppression de la salle.");
+        toast.error("Erreur lors de la suppression de la reservation.");
       }
     }
   };
@@ -95,43 +95,43 @@ function ListExam() {
           </div>
         </div>
 
-        {exams.map((exam, key) => (
+        {reservations.map((reservation, key) => (
           <div
             className={`grid grid-cols-2 sm:grid-cols-9 ${
-              key === exams.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"
+              key === reservations.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"
             }`}
-            key={exam.id}
+            key={reservation.id}
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {studentNames[exam.studentId] || "Loading..."}
+                {studentNames[reservation.studentId] || "Loading..."}
               </p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {sportNames[exam.sportId] || "Loading..."}
+                {sportNames[reservation.sportId] || "Loading..."}
               </p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
               <p className="text-black">
-                {exam.hourStart} - {exam.hourEnd}
+                {reservation.hourStart} - {reservation.hourEnd}
               </p>
             </div>
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              {exam.onlyDate}
+              {reservation.onlyDate}
             </div>
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              {/* {exam.codeUIRList} */}
-              {exam.codeUIRList ? exam.codeUIRList.join(" ") : "No codes"}
+              {/* {reservation.codeUIRList} */}
+              {reservation.codeUIRList ? reservation.codeUIRList.join(" ") : "No codes"}
             </div>
 
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update/${exam.id}`}>
+              <Link to={`/update/${reservation.id}`}>
                 <FaRegEdit className="text-graydark cursor-pointer" />
               </Link>
               <MdDelete
                 className="cursor-pointer text-red-500"
-                onClick={() => handleDelete(exam.id)}
+                onClick={() => handleDelete(reservation.id)}
               />
             </div>
           </div>
@@ -141,4 +141,4 @@ function ListExam() {
   );
 }
 
-export default ListExam;
+export default ListReservation;
