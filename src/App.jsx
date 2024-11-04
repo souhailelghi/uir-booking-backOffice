@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import ListReservation from "./components/Reservations/ListReservation.jsx";
 import SportCategorysList from "./components/SportCategorys/SportCategorysList.jsx";
 import UpdateSportCategory from "./components/SportCategorys/UpdateSportCategory.jsx";
@@ -16,11 +16,21 @@ import UpdatePlanning from "./Pages/Plannigs/UpdatePlanning.jsx";
 import LoginSignUp from "./LoginSignUp/loginSignUp.jsx";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  // Initialize isLoggedIn from localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("isLoggedIn") === "true";
+  });
 
-  // Function to handle login (can be passed to LoginSignUp component)
+  // Function to handle login and persist state
   const handleLogin = () => {
-    setIsLoggedIn(true); // Update login state to true upon login
+    setIsLoggedIn(true);
+    localStorage.setItem("isLoggedIn", "true"); // Store login status in localStorage
+  };
+
+  // Function to handle logout and update localStorage
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("isLoggedIn"); // Clear login status from localStorage
   };
 
   return (
@@ -29,7 +39,7 @@ function App() {
         <div className="flex h-screen">
           <Sidebar />
           <div className="flex-1 flex flex-col">
-            <Header />
+            <Header onLogout={handleLogout} /> {/* Pass handleLogout to Header */}
             <div className="p-10">
               <Routes>
                 <Route path="/" element={<ListReservation />} />
@@ -48,7 +58,6 @@ function App() {
           </div>
         </div>
       ) : (
-        // Show the LoginSignUp component if not logged in
         <LoginSignUp onLogin={handleLogin} />
       )}
     </Router>
