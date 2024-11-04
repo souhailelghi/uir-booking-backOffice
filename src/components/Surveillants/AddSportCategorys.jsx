@@ -41,7 +41,7 @@ const AddSportCategorys = () => {
           title: " Sport Categorys ajouté avec succès!",
           icon: "success",
         });
-        navigate("/Surveillants");
+        navigate("/SportCategorys");
       } else {
         Swal.fire({
           title: "Erreur lors de l'ajout du Sport Categorys!",

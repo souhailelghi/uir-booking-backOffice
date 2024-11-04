@@ -53,7 +53,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/Surveillants"
+                      to="/SportCategorys"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
                       <MdSupervisorAccount className="text-gray-500" />

@@ -4,23 +4,23 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const SurveillantList = () => {
+const SportCategorysList = () => {
   const [listData, setListData] = useState([]);
 
-  const fetchSurveillants = async () => {
+  const fetchSportCategorys = async () => {
     try {
       const response = await axios.get("https://localhost:7125/api/SportCategorys/list");
       setListData(response.data);
     } catch (error) {
-      console.error("Error fetching surveillants:", error);
+      console.error("Error fetching Sport Categorys:", error);
     }
   };
 
   useEffect(() => {
-    fetchSurveillants();
+    fetchSportCategorys();
   }, []);
 
-  const handleDelete = async (supervisorId) => {
+  const handleDelete = async (SportCategorysId) => {
     Swal.fire({
       title: "Êtes-vous sûr de vouloir supprimer cet élément ?",
       icon: "warning",
@@ -32,9 +32,9 @@ const SurveillantList = () => {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `https://localhost:7125/api/SportCategorys/delete/${supervisorId}`
+            `https://localhost:7125/api/SportCategorys/delete/${SportCategorysId}`
           );
-          fetchSurveillants();
+          fetchSportCategorys();
           Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
         } catch (error) {
           Swal.fire("Erreur", "Erreur lors de la suppression.", "error");
@@ -50,7 +50,7 @@ const SurveillantList = () => {
         Sport Categorys
         </h4>
         <Link
-          to="/add-surveillant"
+          to="/add-SportCategorys"
           className="px-4 py-2 bg-blue-950 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
           Ajouter Categorys
@@ -102,4 +102,4 @@ const SurveillantList = () => {
   );
 };
 
-export default SurveillantList;
+export default SportCategorysList;
