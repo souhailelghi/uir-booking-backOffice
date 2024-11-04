@@ -105,7 +105,7 @@ function UpdatePlanning() {
       await axios.put('https://localhost:7125/api/Plannings/update', planningData);
       setSuccessMessage('Planning updated successfully!');
       console.log("update .");
-      navigate("/room-list");
+      navigate("/sport-list");
       setErrorMessage('');
     } catch (error) {
       setErrorMessage('Error updating planning: ' + error.message);

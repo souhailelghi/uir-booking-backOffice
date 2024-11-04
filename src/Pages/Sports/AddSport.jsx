@@ -4,7 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddRoom = () => {
+const AddSport = () => {
   const [categorieId, setCategorieId] = useState("");
   const [referenceSport, setReferenceSport] = useState("");
   const [nbPlayer, setNbPlayer] = useState("");
@@ -65,7 +65,7 @@ const AddRoom = () => {
       });
       if (response.status === 200) {
         toast.success("Sport ajouté avec succès!");
-        navigate("/room-list");
+        navigate("/sport-list");
       } else {
         toast.error("Erreur lors de l'ajout du sport!");
       }
@@ -75,7 +75,7 @@ const AddRoom = () => {
   };
 
   const handleCancel = () => {
-    navigate("/room-list");
+    navigate("/sport-list");
   };
 
   return (
@@ -151,4 +151,4 @@ const AddRoom = () => {
   );
 };
 
-export default AddRoom;
+export default AddSport;

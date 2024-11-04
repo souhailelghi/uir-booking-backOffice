@@ -4,11 +4,11 @@ import ApiManager from '../../api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const UpdateRoom = () => {
+const UpdateSport = () => {
   const { id } = useParams();
-  const [roomType, setRoomType] = useState('');
-  const [capacity, setCapacity] = useState('');
-  const [roomName, setRoomName] = useState('');
+  // const [roomType, setRoomType] = useState('');
+  // const [capacity, setCapacity] = useState('');
+  // const [roomName, setRoomName] = useState('');
   const [categorieId, setCategorieId] = useState("");
   const [referenceSport, setReferenceSport] = useState("");
   const [nbPlayer, setNbPlayer] = useState("");
@@ -23,7 +23,7 @@ const UpdateRoom = () => {
   useEffect(() => {
     const fetchSportCategories = async () => {
       try {
-        const response = await axios.get("https://localhost:7125/api/SportCategorys/list");
+        const response = await ApiManager.get("https://localhost:7125/api/SportCategorys/list");
         setSportCategories(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des catégories sportives:", error);
@@ -33,31 +33,31 @@ const UpdateRoom = () => {
   }, []);
 
   useEffect(() => {
-    const fetchRoom = async () => {
+    const fetchSport = async () => {
       try {
         const response = await ApiManager.get(`/Sports/${id}`);
         if (response.status === 200) {
           const roomData = response.data;
-          setRoomType(roomData.roomType);
-          setCapacity(roomData.capacity);
-          setRoomName(roomData.roomName);
+          // setRoomType(roomData.roomType);
+          // setCapacity(roomData.capacity);
+          // setRoomName(roomData.roomName);
         } else {
-          toast.error('Erreur lors de la récupération de la salle.');
+          toast.error('Erreur lors de la récupération de la sport.');
         }
       } catch (error) {
-        console.error('Error fetching room:', error);
-        toast.error('Erreur lors de la récupération de la salle.');
+        console.error('Error fetching sport:', error);
+        toast.error('Erreur lors de la récupération de sport.');
       }
     };
-    fetchRoom();
+    fetchSport();
   }, [id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!roomType || !capacity || !roomName) {
-      toast.error("Assurez-vous de remplir tout!");
-      return;
-    }
+    // if (!roomType || !capacity || !roomName) {
+    //   toast.error("Assurez-vous de remplir tout!");
+    //   return;
+    // }
 
     const formData = {
       id: id,
@@ -74,19 +74,19 @@ const UpdateRoom = () => {
     try {
       const response = await ApiManager.put(`/Sports/update`, formData);
       if (response.status === 200) {
-        toast.success("Salle mise à jour avec succès!");
-        navigate('/room-list');
+        toast.success("sport mise à jour avec succès!");
+        navigate('/sport-list');
       } else {
-        toast.error("Erreur lors de la mise à jour de la salle!");
+        toast.error("Erreur lors de la mise à jour de la sport!");
       }
     } catch (error) {
-      console.error('Error updating room:', error);
+      console.error('Error updating sport:', error);
       toast.error(`Erreur réseau! ${error.message}`);
     }
   };
 
   const handleCancel = () => {
-    navigate('/room-list');
+    navigate('/sport-list');
   };
 
   return (
@@ -230,4 +230,4 @@ const UpdateRoom = () => {
   );
 };
 
-export default UpdateRoom;
+export default UpdateSport;

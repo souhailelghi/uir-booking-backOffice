@@ -44,7 +44,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/room-list"
+                      to="/sport-list"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
                       <MdMeetingRoom className="text-gray-500" />
@@ -60,7 +60,7 @@ const Sidebar = () => {
                       <span>SportCategorys</span>
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/ExamResultsPage"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
@@ -68,8 +68,8 @@ const Sidebar = () => {
                       <FaClipboard className="text-gray-500" />
                       <span>black list</span>
                     </Link>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <Link
                       to="/TestResultsPage"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
@@ -77,8 +77,8 @@ const Sidebar = () => {
                       <FaChartBar className="text-gray-500" />
                       <span>User list</span>
                     </Link>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <Link
                       to="/ListTest"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
@@ -86,7 +86,10 @@ const Sidebar = () => {
                       <FaCalendarAlt className="text-gray-500" />
                       <span>settings</span>
                     </Link>
-                  </li>
+                  </li> */}
+
+                
+                  {/* 
                   <li>
                     <Link
                       to="/VaraintExam"
@@ -95,7 +98,7 @@ const Sidebar = () => {
                       <FaCalendarAlt className="text-gray-500" />
                       <span>Planing</span>
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </nav>

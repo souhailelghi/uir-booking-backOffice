@@ -8,11 +8,11 @@ import ApiManager from '../../api';
 
 
 //todo : list sport 
-const RoomList = () => {
+const SportList = () => {
   const [listData, setListData] = useState([]);
   const navigate = useNavigate();
 
-  const fetchRooms = async () => {
+  const fetchSports = async () => {
     try {
       const response = await ApiManager.get('/Sports/list');
       console.log(response.data);
@@ -20,40 +20,40 @@ const RoomList = () => {
       setListData(response.data);
       
     } catch (error) {
-      console.error('Error fetching rooms:', error);
+      console.error('Error fetching sports:', error);
       toast.error('Erreur lors de la récupération des sports.');
     }
   };
 
   useEffect(() => {
-    fetchRooms();
+    fetchSports();
   }, []);
 
-  const handleDelete = async (roomId) => {
+  const handleDelete = async (sportId) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
       try {
-        await ApiManager.delete(`/Sports/delete/${roomId}`);
-        fetchRooms();
-        toast.success("Salle supprimée avec succès !");
+        await ApiManager.delete(`/Sports/delete/${sportId}`);
+        fetchSports();
+        toast.success("Sport supprimée avec succès !");
       } catch (error) {
-        toast.error("Erreur lors de la suppression de la salle.");
+        toast.error("Erreur lors de la suppression de la sport.");
       }
     }
-    console.log(roomId);
+    console.log(sportId);
   };
 
   // add time to sport : 
-  const handleAddTime = async (roomId) => {
+  const handleAddTime = async (sportId) => {
     // if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
     //   try {
-    //     await ApiManager.delete(`/Sports/delete/${roomId}`);
-    //     fetchRooms();
+    //     await ApiManager.delete(`/Sports/delete/${sportId}`);
+    //     fetchSports();
     //     toast.success("Salle supprimée avec succès !");
     //   } catch (error) {
     //     toast.error("Erreur lors de la suppression de la salle.");
     //   }
     // }
-    console.log(roomId);
+    console.log(sportId);
   };
 
   const handleFetchClick = (id) => {
@@ -68,7 +68,7 @@ const RoomList = () => {
           Sports
         </h4>
         <button
-          onClick={() => navigate('/add-room')}
+          onClick={() => navigate('/add-sport')}
           className="px-4 py-2 bg-blue-950 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
           Ajouter Sport
@@ -79,7 +79,7 @@ const RoomList = () => {
         <div className="grid grid-cols-3 rounded-sm bg-blue-100 dark:bg-meta-4 text-graydark sm:grid-cols-4">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Nom de la salle
+              Nom de la sport
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
@@ -95,30 +95,30 @@ const RoomList = () => {
           
         </div>
 
-        {listData.map((room, key) => (
+        {listData.map((sport, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-4 ${key === listData.length - 1 ? '' : 'border-b border-stroke dark:border-strokedark'}`}
-            key={room.id}
+            key={sport.id}
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {room.name}
+                {sport.name}
               </p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">{room.description == 0?"Salle Normale" : room.daysoff}</p>
+              <p className="text-black">{sport.description == 0?"Salle Normale" : sport.daysoff}</p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">{room.nbPlayer}</p>
+              <p className="text-black">{sport.nbPlayer}</p>
             </div>
             
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update-room/${room.id}`}>
+              <Link to={`/update-sport/${sport.id}`}>
                 <FaRegEdit className='text-graydark cursor-pointer' />
               </Link>
-              <RiDeleteBin5Line className='text-red-600 cursor-pointer' onClick={() => handleDelete(room.id)} />
+              <RiDeleteBin5Line className='text-red-600 cursor-pointer' onClick={() => handleDelete(sport.id)} />
              
-              <RiTimeLine className='text-red-500 cursor-pointer' onClick={() => handleFetchClick(room.id)} />
+              <RiTimeLine className='text-red-500 cursor-pointer' onClick={() => handleFetchClick(sport.id)} />
                 
                 {/* <button className="btn btn-secondary" onClick={() => handleFetchClick(room.id)}>
                   Fetch all Date Hours By Id
@@ -133,4 +133,4 @@ const RoomList = () => {
   );
 };
 
-export default RoomList;
+export default SportList;
