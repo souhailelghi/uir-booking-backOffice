@@ -125,7 +125,7 @@ function ListReservation() {
               {reservation.codeUIRList ? reservation.codeUIRList.join(" ") : "No codes"}
             </div>
 
-            <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
+            {/* <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
               <Link to={`/update/${reservation.id}`}>
                 <FaRegEdit className="text-graydark cursor-pointer" />
               </Link>
@@ -133,7 +133,7 @@ function ListReservation() {
                 className="cursor-pointer text-red-500"
                 onClick={() => handleDelete(reservation.id)}
               />
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
