@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListReservation from "./components/Reservations/ListReservation.jsx";
 // import PlanningExam from "./components/Organism/PlanningExam";
 import SportCategorysList from "./components/Surveillants/SportCategorysList.jsx";
-import UpdateSurveillant from "./components/Surveillants/UpdateSurveillant.jsx";
+import UpdateSportCategory from "./components/Surveillants/UpdateSportCategory.jsx";
 import Header from "./components/Layouts/Header";
 import ExamResultsPage from "./Pages/ExamResultsPage";
 import ExamDetailPage from "./Pages/ExamDetailPage";
@@ -57,7 +57,7 @@ function App() {
               {/* <Route path="/PlanningExam/Create" element={<PlanningExam />} /> */}
               <Route path="/SportCategorys" element={<SportCategorysList />} />
               <Route path="/add-SportCategorys" element={<AddSportCategorys />} />
-              <Route path="/Update/:id" element={<UpdateSurveillant />} />
+              <Route path="/Update/:id" element={<UpdateSportCategory />} />
               <Route path="/Planification" element={<Planification />} />
               <Route path="/add-room" element={<AddRoom />} />
               <Route path="/planning-list" element={<PlaningsList />} />

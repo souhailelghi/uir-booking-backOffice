@@ -3,15 +3,15 @@ import Swal from "sweetalert2";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const UpdateSurveillant = () => {
+const UpdateSportCategory = () => {
   const { id } = useParams();
-  const [firstName, setFirstName] = useState("");
+  // const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSurveillant = async () => {
+    const fetchSportCategory = async () => {
       try {
         const response = await axios.get(
           `https://localhost:7125/api/SportCategorys/${id}`
@@ -20,15 +20,15 @@ const UpdateSurveillant = () => {
         setLastName(response.data.lastName);
         // setTitle(response.data.title);
       } catch (error) {
-        console.error("Error fetching surveillant:", error);
+        console.error("Error fetching Sport Category:", error);
         Swal.fire({
-          title: "Erreur lors de la récupération du surveillant",
+          title: "Erreur lors de la récupération du Sport Category",
           text: error.message,
           icon: "error",
         });
       }
     };
-    fetchSurveillant();
+    fetchSportCategory();
   }, [id]);
 
   const handleSubmit = async (event) => {
@@ -63,13 +63,13 @@ const UpdateSurveillant = () => {
       );
       if (response.status === 200) {
         Swal.fire({
-          title: "Surveillant mis à jour avec succès!",
+          title: "Sport Category mis à jour avec succès!",
           icon: "success",
         });
-        navigate("/Surveillants");
+        navigate("/SportCategorys");
       } else {
         Swal.fire({
-          title: "Erreur lors de la mise à jour du surveillant!",
+          title: "Erreur lors de la mise à jour du Sport Category!",
           icon: "error",
         });
       }
@@ -88,16 +88,16 @@ const UpdateSurveillant = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Modifier Surveillant
+              Modifier Sport Category
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2">
-                  <label className="mb-2.5 block text-black dark:text-white">
+                  {/* <label className="mb-2.5 block text-black dark:text-white">
                     Prénom <span className="text-meta-1">*</span>
-                  </label>
+                  </label> */}
                   {/* <input
                     type="text"
                     value={firstName}
@@ -107,7 +107,7 @@ const UpdateSurveillant = () => {
                     onChange={(e) => setFirstName(e.target.value)}
                   /> */}
                   <label className="mt-8 mb-2.5 block text-black dark:text-white">
-                    Nom de famille <span className="text-meta-1">*</span>
+                  Sport Category name<span className="text-meta-1">*</span>
                   </label>
                   <input
                     type="text"
@@ -121,9 +121,9 @@ const UpdateSurveillant = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2">
-                  <label className="mb-2.5 block text-black dark:text-white">
+                  {/* <label className="mb-2.5 block text-black dark:text-white">
                     Titre <span className="text-meta-1">*</span>
-                  </label>
+                  </label> */}
                   {/* <input
                     type="text"
                     value={title}
@@ -136,7 +136,7 @@ const UpdateSurveillant = () => {
               </div>
               <div className="flex justify-end gap-4.5">
                 <Link
-                  to="/Surveillants"
+                  to="/SportCategorys"
                   className="flex justify-center rounded bg-meta-1 py-2 px-6 font-medium text-white hover:bg-opacity-90"
                 >
                   Annuler
@@ -156,4 +156,4 @@ const UpdateSurveillant = () => {
   );
 };
 
-export default UpdateSurveillant;
+export default UpdateSportCategory;
