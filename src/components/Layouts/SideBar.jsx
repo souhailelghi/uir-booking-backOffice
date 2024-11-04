@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar } from "react-icons/fa";
+import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar ,FaSwatchbook , FaPassport} from "react-icons/fa";
 import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
 import { MdMeetingRoom, MdSupervisorAccount } from "react-icons/md";
 import UIRRLogo from "../../assets/UIRR.png";
@@ -27,7 +27,7 @@ const Sidebar = () => {
                 {/* <span className="text-2xl font-extrabold text-green">
                   Logo
                 </span> */}
-                {/* <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  /> */}
+                <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  />
               </div>
             </div>
             <nav>
@@ -41,7 +41,7 @@ const Sidebar = () => {
                       to="/ListReservation"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
-                      <FaCalendarAlt className="text-gray-500" />
+                      <MdSupervisorAccount  className="text-gray-500" />
                       <span>Reservations</span>
                     </Link>
                   </li>
@@ -50,7 +50,7 @@ const Sidebar = () => {
                       to="/sport-list"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
-                      <MdMeetingRoom className="text-gray-500" />
+                      <FaPassport className="text-gray-500" />
                       <span>Les Sports</span>
                     </Link>
                   </li>
@@ -59,7 +59,7 @@ const Sidebar = () => {
                       to="/SportCategorys"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
-                      <MdSupervisorAccount className="text-gray-500" />
+                      <FaSwatchbook className="text-gray-500" />
                       <span>SportCategorys</span>
                     </Link>
                   </li>

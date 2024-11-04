@@ -8,6 +8,7 @@ const LoginSignUp = ({ onLogin }) => {
   const [action, setAction] = useState("Login");
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleNameChange = ({ target: { value } }) => {
@@ -19,6 +20,12 @@ const LoginSignUp = ({ onLogin }) => {
   };
 
   const handleLogin = async () => {
+    setError('');
+     // Input validation
+     if (!name || (action === "Sign Up" && !email) || !password) {
+      setError("Please fill in all required fields.");
+      return; // Stop execution if fields are empty
+    }
     try {
       const result = await axios.post('https://localhost:7253/api/Account/login', {
         username: name,
@@ -36,12 +43,16 @@ const LoginSignUp = ({ onLogin }) => {
       navigate('/' ); // Redirect to the main page or desired route after login
 
     } catch (error) {
-      if (error.response) {
-        alert(`Error: ${error.response.status} - ${error.response.data}`);
+      if (error.response && error.response.status === 401 ) {
+        // alert(`Error: ${error.response.status} - ${error.response.data}`);
+   
+        
+        // setError(`Error: ${error.response.status} - ${error.response.data}`);
+        setError(`email or passe word incorrect !`);
       } else if (error.request) {
-        alert('Error: No response from server.');
+        setError('Error: No response from server.');
       } else {
-        alert('Error: Request setup failed.');
+        setError('Error: Request setup failed.');
       }
     }
   };
@@ -62,6 +73,7 @@ const LoginSignUp = ({ onLogin }) => {
                 id="txtName"
                 placeholder="Enter Name"
                 onChange={handleNameChange}
+                required
               />
             </div>
           )}
@@ -72,6 +84,7 @@ const LoginSignUp = ({ onLogin }) => {
               id="txtName"
               placeholder="Enter Name"
               onChange={handleNameChange}
+              required
             />
           </div>
           <div className='input'>
@@ -81,9 +94,11 @@ const LoginSignUp = ({ onLogin }) => {
               id="txtPassword"
               placeholder="Enter Password"
               onChange={handlePasswordChange}
+              required
             />
           </div>
         </div>
+        {error && <div className='error-message'>{error}</div>}
         <div className='submit-container'>
           <div className={action === "Sign Up" ? "Submit gray" : "submit"} onClick={async () => {
             if (action === "Login") {

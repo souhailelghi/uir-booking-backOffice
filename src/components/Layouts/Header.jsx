@@ -15,7 +15,7 @@ function Header({ onLogout }) {
     <div className="flex items-center justify-between pl-17 p-4 bg-white shadow-sm">
       <Link to="/Home" className="font-bold">
         {/* <p>LOGO</p> */}
-        <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full" />
+        {/* <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full" /> */}
       </Link>
       <div className="relative">
         <div className="flex items-center space-x-4 pr-10">
