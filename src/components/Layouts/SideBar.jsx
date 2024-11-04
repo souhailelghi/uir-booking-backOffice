@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar } from "react-icons/fa";
 import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
 import { MdMeetingRoom, MdSupervisorAccount } from "react-icons/md";
+import UIRRLogo from "../../assets/UIRR.png";
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +24,10 @@ const Sidebar = () => {
           <div className="py-7 px-2">
             <div className="flex items-center justify-between px-4">
               <div className="flex items-center space-x-2">
-                <span className="text-2xl font-extrabold text-green">
+                {/* <span className="text-2xl font-extrabold text-green">
                   Logo
-                </span>
+                </span> */}
+                {/* <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  /> */}
               </div>
             </div>
             <nav>
