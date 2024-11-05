@@ -9,6 +9,8 @@ function ListReservation() {
   const [reservations, setReservations] = useState([]);
   const [sportNames, setSportNames] = useState({});
   const [studentNames, setStudentNames] = useState({});
+  const [studentFirstNames, setstudentFirstNames] = useState({});
+  const [studentLastName, setstudentLastName] = useState({});
 
   useEffect(() => {
     fetchReservation();
@@ -47,10 +49,22 @@ function ListReservation() {
   const fetchStudentName = async (studentId) => {
     try {
       const response = await ApiManager.get(`/Students/student/${studentId}`);
+
+
       setStudentNames((prevStudentNames) => ({
         ...prevStudentNames,
         [studentId]: response.data.codeUIR,
       }));
+
+      setstudentFirstNames((prevStudentNames) => ({
+        ...prevStudentNames,
+        [studentId]: response.data.firstName,
+      }));
+      setstudentLastName((prevStudentNames) => ({
+        ...prevStudentNames,
+        [studentId]: response.data.lastName,
+      }));
+
     } catch (error) {
       console.error("Error fetching student name:", error);
     }
@@ -81,6 +95,12 @@ function ListReservation() {
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Student code</h5>
           </div>
+          <div className="p-2.5 xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">first Name</h5>
+          </div>
+          <div className="p-2.5 xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">last Name</h5>
+          </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Sport</h5>
           </div>
@@ -105,6 +125,16 @@ function ListReservation() {
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block font-semibold">
                 {studentNames[reservation.studentId] || "Loading..."}
+              </p>
+            </div>
+            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+              <p className="hidden text-black dark:text-white sm:block font-semibold">
+                {studentFirstNames[reservation.studentId] || "Loading..."}
+              </p>
+            </div>
+            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+              <p className="hidden text-black dark:text-white sm:block font-semibold">
+                {studentLastName[reservation.studentId] || "Loading..."}
               </p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">

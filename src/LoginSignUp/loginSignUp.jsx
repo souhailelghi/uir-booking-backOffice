@@ -6,13 +6,17 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginSignUp = ({ onLogin }) => {
   const [action, setAction] = useState("Login");
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUserName] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleNameChange = ({ target: { value } }) => {
-    setName(value);
+    setUserName(value);
+  };
+  const handleEmailChange = ({ target: { value } }) => {
+    setEmail(value);
   };
 
   const handlePasswordChange = ({ target: { value } }) => {
@@ -22,13 +26,13 @@ const LoginSignUp = ({ onLogin }) => {
   const handleLogin = async () => {
     setError('');
      // Input validation
-     if (!name || (action === "Sign Up" && !email) || !password) {
+     if (!email || (action === "Sign Up" && !email) || !password) {
       setError("Please fill in all required fields.");
       return; // Stop execution if fields are empty
     }
     try {
       const result = await axios.post('https://localhost:7253/api/Account/login', {
-        username: name,
+        email: email,
         password: password,
       });
     //   console.log("Login successful, token:", result.data.token);
@@ -57,6 +61,48 @@ const LoginSignUp = ({ onLogin }) => {
     }
   };
 
+
+  const handleSignUp = async ()=>{
+    setError('');
+    // Input validation
+    if (!email || (action === "Sign Up" && !email) || !password) {
+     setError("Please fill in all required fields.");
+     return; // Stop execution if fields are empty
+   }
+   try {
+     const result = await axios.post('https://localhost:7253/api/Account/registerAdmin', {
+      username:username,
+       email: email,
+       password: password,
+     });
+
+     var token = result.data.token;
+    //  console.log("the token of registerAdmin is : " , token);
+     
+      // Store the token in localStorage for access across components
+        localStorage.setItem("token", token);
+        alert("account create succes")
+
+     // Call onLogin to update isLoggedIn in App
+     onLogin();
+
+   //   alert(`Success: ${result.data.token}`);
+     navigate('/' ); // Redirect to the main page or desired route after login
+
+   } catch (error) {
+     if (error.response && error.response.status === 401 ) {
+       // alert(`Error: ${error.response.status} - ${error.response.data}`);
+  
+       
+       // setError(`Error: ${error.response.status} - ${error.response.data}`);
+       setError(`email or passe word incorrect !`);
+     } else if (error.request) {
+       setError('Error: No response from server.');
+     } else {
+       setError('Error: Request setup failed.');
+     }
+   }
+  };
   return (
     <div className='Main-container'>
       <div className='Login-container'>
@@ -80,10 +126,10 @@ const LoginSignUp = ({ onLogin }) => {
           <div className='input'>
             <img src={assets.email} alt='email' />
             <input
-              type="text"
+              type="email"
               id="txtName"
-              placeholder="Enter Name"
-              onChange={handleNameChange}
+              placeholder="Enter Email"
+              onChange={handleEmailChange}
               required
             />
           </div>
@@ -109,8 +155,13 @@ const LoginSignUp = ({ onLogin }) => {
           }}>
             Login
           </div>
-          <div className={action === "Login" ? "Submit gray" : "submit"} onClick={() => {
-            setAction("Sign Up")
+          <div className={action === "Login" ? "Submit gray" : "submit"} onClick={async () => {
+            if(action==="Sign Up"){
+              await handleSignUp();
+            } else{
+
+              setAction("Sign Up")
+            }
           }}>
             Sign Up
           </div>
