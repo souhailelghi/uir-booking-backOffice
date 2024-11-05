@@ -23,10 +23,50 @@ const LoginSignUp = ({ onLogin }) => {
     setPassword(value);
   };
 
+  // const handleLogin = async () => {
+  //   setError('');
+  //    // Input validation
+  //    if (!email || (action === "Sign Up" && !email) || !password) {
+  //     setError("Please fill in all required fields.");
+  //     return; // Stop execution if fields are empty
+  //   }
+  //   try {
+  //     const result = await axios.post('https://localhost:7253/api/Account/login', {
+  //       email: email,
+  //       password: password,
+  //     });
+  //   //   console.log("Login successful, token:", result.data.token);
+  //     var token = result.data.token;
+  //      // Store the token in localStorage for access across components
+  //        localStorage.setItem("token", token);
+
+  //     // Call onLogin to update isLoggedIn in App
+  //     onLogin();
+
+  //   //   alert(`Success: ${result.data.token}`);
+  //     navigate('/' ); // Redirect to the main page or desired route after login
+
+  //   } catch (error) {
+      
+  //   console.log("err req :",error.request)
+  //     if (error.response && error.response.status === 401 ) {
+  //       // alert(`Error: ${error.response.status} - ${error.response.data}`);
+   
+        
+  //       // setError(`Error: ${error.response.status} - ${error.response.data}`);
+  //       setError(`email or passe word incorrect !`);
+  //     } else if (error.request) {
+  //       setError('Error: No response from server.');
+  //     } else {
+  //       setError('Error: Request setup failed.');
+  //     }
+  //   }
+  // };
+
   const handleLogin = async () => {
     setError('');
-     // Input validation
-     if (!email || (action === "Sign Up" && !email) || !password) {
+    // Input validation
+    if (!email || (action === "Sign Up" && !email) || !password) {
       setError("Please fill in all required fields.");
       return; // Stop execution if fields are empty
     }
@@ -35,24 +75,29 @@ const LoginSignUp = ({ onLogin }) => {
         email: email,
         password: password,
       });
-    //   console.log("Login successful, token:", result.data.token);
-      var token = result.data.token;
-       // Store the token in localStorage for access across components
-         localStorage.setItem("token", token);
+
+      const token = result.data.token;
+      // Store the token in localStorage for access across components
+      localStorage.setItem("token", token);
 
       // Call onLogin to update isLoggedIn in App
       onLogin();
 
-    //   alert(`Success: ${result.data.token}`);
-      navigate('/' ); // Redirect to the main page or desired route after login
-
+      navigate('/'); // Redirect to the main page or desired route after login
     } catch (error) {
-      if (error.response && error.response.status === 401 ) {
-        // alert(`Error: ${error.response.status} - ${error.response.data}`);
-   
-        
-        // setError(`Error: ${error.response.status} - ${error.response.data}`);
-        setError(`email or passe word incorrect !`);
+      console.log("err req:", error.request);
+      if (error.response) {
+        if (error.response.status === 401) {
+          // Check if the message matches the specific admin restriction
+          const message = error.response.data.message;
+          if (message === "Access denied. Only admins can log in.") {
+            setError(message); // Display the specific message from the response
+          } else {
+            setError("Email or password incorrect!");
+          }
+        } else {
+          setError('Error: Unable to log in. Please try again.');
+        }
       } else if (error.request) {
         setError('Error: No response from server.');
       } else {
@@ -60,7 +105,6 @@ const LoginSignUp = ({ onLogin }) => {
       }
     }
   };
-
 
   const handleSignUp = async ()=>{
     setError('');
@@ -90,12 +134,14 @@ const LoginSignUp = ({ onLogin }) => {
      navigate('/' ); // Redirect to the main page or desired route after login
 
    } catch (error) {
+    
      if (error.response && error.response.status === 401 ) {
        // alert(`Error: ${error.response.status} - ${error.response.data}`);
   
        
        // setError(`Error: ${error.response.status} - ${error.response.data}`);
        setError(`email or passe word incorrect !`);
+      
      } else if (error.request) {
        setError('Error: No response from server.');
      } else {
