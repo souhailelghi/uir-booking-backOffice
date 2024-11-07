@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import ApiManager from "../../api";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Swal from "sweetalert2";
 
 function PlaningsList() {
   const [VariantExams, setVariantExams] = useState([]);
@@ -57,21 +58,31 @@ function PlaningsList() {
   };
 
   const handleDelete = async (testId) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir supprimer cet élément ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, Supprimer",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
       try {
         const response = await ApiManager.delete(`/Plannings/delete/${testId}`);
         if (response.status === 200) {
           setVariantExams(VariantExams.filter((test) => test.id !== testId));
-          toast.success("Test supprimé avec succès !");
+          toast.success("Planning supprimé avec succès !");
         } else {
           toast.error("Erreur lors de la suppression du test.");
         }
       } catch (error) {
-        console.error("Error deleting test:", error);
-        toast.error("Erreur lors de la suppression du test.");
+        console.error("Error deleting Planning:", error);
+        toast.error("Erreur lors de la suppression du Planning.");
       }
-    }
-  };
+    }  
+  });
+}
+  
 
   return (
     <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -82,6 +93,7 @@ function PlaningsList() {
         <button
           onClick={handleFetchClick} // Use sportId directly here
           className="px-4 py-2 bg-blue-950 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" 
+          state={{sportIds:sportId}}
         >
           Ajouter un planing
         </button>

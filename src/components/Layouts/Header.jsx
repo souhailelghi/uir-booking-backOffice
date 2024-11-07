@@ -6,6 +6,7 @@ import UIRRLogo from "../../assets/UIR-Rabat.jpg";
 
 function Header({ onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);

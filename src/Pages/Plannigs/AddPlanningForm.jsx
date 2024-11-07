@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 
 function AddPlanningForm() {
 
+
     const sportId = new URLSearchParams(useLocation().search).get("id");
    
     const [day, setDay] = useState(0);
@@ -67,7 +68,7 @@ function AddPlanningForm() {
 
       if (response.ok) {
         Swal.fire({
-          title: " Sport  ajouté avec succès!",
+          title: "Planning ajouté avec succès!",
           icon: "success",
         });
         // alert('Planning added successfully!');
@@ -91,6 +92,10 @@ function AddPlanningForm() {
      
         
   
+  };
+
+  const handleCancel = () => {
+    navigate(`/planning-list?id=${sportId}`);
   };
 
   return (
@@ -117,6 +122,7 @@ function AddPlanningForm() {
         <label>Time Ranges:</label>
         {timeRanges.map((range, index) => (
           <div key={index} style={{ marginBottom: '10px' }}>
+            <div className="flex items-center space-x-4">
             <label className="mb-2.5 block text-black dark:text-white">Start Time:</label>
             <input
             className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition"
@@ -133,26 +139,28 @@ function AddPlanningForm() {
               onChange={(e) => handleTimeRangeChange(index, 'hourEnd', e.target.value)}
               required
             />
-              <button type="button" className="flex justify-left rounded bg-danger py-2 px-6 font-medium text-white hover:bg-opacity-90" onClick={() => handleRemoveTimeRange(index)}>
+              <button type="button" className="flex ml-auto justify-right rounded bg-danger py-2 px-6 font-medium text-white hover:bg-opacity-90" onClick={() => handleRemoveTimeRange(index)}>
            Remove
-         </button>
+            </button>
+          </div>
           </div>
          
         ))}
-        <button type="button" className="flex justify-left rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90" onClick={addTimeRange}>Add Time Range</button>
+        <button type="button" className="flex justify-left rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90" onClick={addTimeRange}> Ajouter Time </button>
+        <div className="flex justify-end gap-4.5">
+        <button
+        type="button"
+        className="flex justify-center rounded bg-meta-1 py-2 px-6 font-medium text-white hover:bg-opacity-90"
+        onClick={handleCancel}
+      >
+        Annuler
+      </button>
+       <button type="submit" className="flex justify-left rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90"> Ajouter</button>
+      </div>
       </div>
 
-      {/* <div>
-        <label>Date Creation:</label>
-        <input
-          type="datetime-local"
-          value={new Date(dateCreation).toISOString().slice(0, -1)}
-          onChange={(e) => setDateCreation(new Date(e.target.value).toISOString())}
-          required
-        />
-      </div> */}
+      
 
-      <button type="submit" className="flex justify-left rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90">Add Planning</button>
     </form>
   );
 }
