@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ApiManager from "../../api";
 
 const AddSport = () => {
+  
   const [categorieId, setCategorieId] = useState("");
   const [referenceSport, setReferenceSport] = useState("");
   const [nbPlayer, setNbPlayer] = useState("");
@@ -19,7 +21,7 @@ const AddSport = () => {
   useEffect(() => {
     const fetchSportCategories = async () => {
       try {
-        const response = await axios.get("https://localhost:7125/api/SportCategorys/list");
+        const response = await ApiManager.get("/SportCategorys/list");
         setSportCategories(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des catégories sportives:", error);
@@ -58,12 +60,16 @@ const AddSport = () => {
     };
 
     try {
-      const response = await axios.post("https://localhost:7125/api/Sports/add", formData, {
+      const response = await ApiManager.post("/Sports/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       if (response.status === 200) {
+        Swal.fire({
+          title: " Sport  ajouté avec succès!",
+          icon: "success",
+        });
         toast.success("Sport ajouté avec succès!");
         navigate("/sport-list");
       } else {

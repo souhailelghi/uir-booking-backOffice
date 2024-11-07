@@ -63,7 +63,7 @@ const AddSportCategorys = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Créer Sport Categorys
+              Créer Sport Category
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
@@ -72,11 +72,11 @@ const AddSportCategorys = () => {
                 <div className="w-full sm:w-1/2">
                
                   <label className="mt-8 mb-2.5 block text-black dark:text-white">
-                    Nom de sport <span className="text-meta-1">*</span>
+                    Nom de sport Category <span className="text-meta-1">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Entrez  nom de Sport"
+                    placeholder="Entrez  nom de Category"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     required
                     onChange={(e) => setName(e.target.value)}
@@ -86,7 +86,7 @@ const AddSportCategorys = () => {
               
               <div className="flex justify-end gap-4.5">
                 <Link
-                  to="/Home"
+                  to="/SportCategorys"
                   className="flex justify-center rounded bg-meta-1 py-2 px-6 font-medium text-white hover:bg-opacity-90"
                 >
                   Annuler

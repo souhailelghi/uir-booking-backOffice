@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import ApiManager from "../../api";
 
 const UpdateSportCategory = () => {
   const { id } = useParams();
-  // const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [title, setTitle] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSportCategory = async () => {
+    const fetchSportCategoryById = async () => {
+      if (!id) return;
+
       try {
-        const response = await axios.get(
-          `https://localhost:7125/api/SportCategorys/${id}`
-        );
-        // setFirstName(response.data.firstName);
-        setLastName(response.data.lastName);
-        // setTitle(response.data.title);
+        const response = await ApiManager.get(`/SportCategorys/${id}`);
+        const { name } = response.data;
+        setLastName(name);
+        setErrorMessage('');
       } catch (error) {
         console.error("Error fetching Sport Category:", error);
         Swal.fire({
@@ -28,12 +28,13 @@ const UpdateSportCategory = () => {
         });
       }
     };
-    fetchSportCategory();
+
+    fetchSportCategoryById();
   }, [id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!lastName ) {
+    if (!lastName) {
       Swal.fire({
         title: "Assurez-vous de remplir tout!",
         icon: "error",
@@ -43,7 +44,6 @@ const UpdateSportCategory = () => {
 
     const formData = {
       id: id,
-      mydate: "",
       name: lastName,
       image: "",
       description:"",
@@ -52,8 +52,8 @@ const UpdateSportCategory = () => {
     };
 
     try {
-      const response = await axios.put(
-        `https://localhost:7125/api/SportCategorys/update`,
+      const response = await ApiManager.put(
+        `/SportCategorys/update`,
         formData,
         {
           headers: {
@@ -95,43 +95,17 @@ const UpdateSportCategory = () => {
             <div className="p-6.5">
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2">
-                  {/* <label className="mb-2.5 block text-black dark:text-white">
-                    Prénom <span className="text-meta-1">*</span>
-                  </label> */}
-                  {/* <input
-                    type="text"
-                    value={firstName}
-                    placeholder="Entrez votre prénom"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    required
-                    onChange={(e) => setFirstName(e.target.value)}
-                  /> */}
                   <label className="mt-8 mb-2.5 block text-black dark:text-white">
-                  Sport Category name<span className="text-meta-1">*</span>
+                    Sport Category name<span className="text-meta-1">*</span>
                   </label>
                   <input
                     type="text"
                     value={lastName}
-                    placeholder="Entrez votre nom de famille"
+                    placeholder="Entrez le nom de la catégorie"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     required
                     onChange={(e) => setLastName(e.target.value)}
                   />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
-                <div className="w-full sm:w-1/2">
-                  {/* <label className="mb-2.5 block text-black dark:text-white">
-                    Titre <span className="text-meta-1">*</span>
-                  </label> */}
-                  {/* <input
-                    type="text"
-                    value={title}
-                    placeholder="Entrez votre titre"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    required
-                    onChange={(e) => setTitle(e.target.value)}
-                  /> */}
                 </div>
               </div>
               <div className="flex justify-end gap-4.5">

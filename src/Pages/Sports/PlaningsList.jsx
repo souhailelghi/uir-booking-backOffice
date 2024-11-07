@@ -10,6 +10,8 @@ function PlaningsList() {
   const [VariantExams, setVariantExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const sportId = new URLSearchParams(useLocation().search).get("id");
+  console.log("the id sport is : " ,sportId );
+  
   const navigate = useNavigate();
 
 
@@ -134,7 +136,7 @@ function PlaningsList() {
             </div>
       
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update-planning/${test.id}`}>
+              <Link to={`/update-planning/${test.id}` } state={{sportIds:sportId}}>
                 <FaRegEdit className="text-graydark cursor-pointer" />
               </Link>
               <RiDeleteBin5Line

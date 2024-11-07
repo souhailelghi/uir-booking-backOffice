@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams  ,useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function AddPlanningForm() {
 
@@ -65,7 +66,11 @@ function AddPlanningForm() {
       });
 
       if (response.ok) {
-        alert('Planning added successfully!');
+        Swal.fire({
+          title: " Sport  ajouté avec succès!",
+          icon: "success",
+        });
+        // alert('Planning added successfully!');
         navigate(`/planning-list?id=${sportId}`); 
       } else {
         alert('Failed to add planning');

@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
+import ApiManager from "../../api";
 
 const SportCategorysList = () => {
   const [listData, setListData] = useState([]);
 
   const fetchSportCategorys = async () => {
     try {
-      const response = await axios.get("https://localhost:7125/api/SportCategorys/list");
+      const response = await ApiManager.get("/SportCategorys/list");
       setListData(response.data);
     } catch (error) {
       console.error("Error fetching Sport Categorys:", error);
@@ -31,8 +32,8 @@ const SportCategorysList = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(
-            `https://localhost:7125/api/SportCategorys/delete/${SportCategorysId}`
+          await ApiManager.delete(
+            `/SportCategorys/delete/${SportCategorysId}`
           );
           fetchSportCategorys();
           Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
@@ -64,11 +65,7 @@ const SportCategorysList = () => {
             Categorys
             </h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Date Creation
-            </h5>
-          </div>
+         
         </div>
 
         {listData.map((list) => (
@@ -81,9 +78,7 @@ const SportCategorysList = () => {
                 {list.name} 
               </p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">{list.mydate}</p>
-            </div>
+          
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
               <Link to={`/update/${list.id}`}>
                 <FaRegEdit className="text-graydark cursor-pointer" />

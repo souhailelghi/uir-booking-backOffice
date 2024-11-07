@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams ,  useLocation} from "react-router-dom";
 import ApiManager from "../../api";
 import { toast } from "react-toastify";
 import JoditEditor from "jodit-react";
 import axios from 'axios';
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 function UpdatePlanning() {
+
+  const location = useLocation();
+  const sportIds = location.state?.sportIds;
+  
+
+  console.log("names:", sportIds);
   const { id } = useParams(); // Get the test ID from the URL
   const {
     register,
@@ -94,6 +101,8 @@ function UpdatePlanning() {
 
   const handleUpdatePlanning = async (event) => {
     event.preventDefault();
+    console.log("id sport : " , id);
+    
 
     const planningData = {
       id: id,
@@ -102,10 +111,22 @@ function UpdatePlanning() {
     };
 
     try {
-      await axios.put('https://localhost:7125/api/Plannings/update', planningData);
-      setSuccessMessage('Planning updated successfully!');
-      console.log("update .");
-      navigate("/sport-list");
+      const response = await ApiManager.put('/Plannings/update', planningData);
+
+
+      if (response.status === 200) {
+        Swal.fire({
+          title: " Sport  ajouté avec succès!",
+          icon: "success",
+        });
+        toast.success("Planning updated successfully!");
+        setSuccessMessage('Planning updated successfully!');
+        console.log("update .");
+        navigate(`/planning-list?id=${sportIds}`);
+      } else {
+        toast.error("Failed to update test.");
+      }
+     
       setErrorMessage('');
     } catch (error) {
       setErrorMessage('Error updating planning: ' + error.message);
@@ -203,6 +224,10 @@ function UpdatePlanning() {
       const response = await ApiManager.put(`/Plannings/update/${id}`, payload);
 
       if (response.status === 200) {
+        Swal.fire({
+          title: " Sport  ajouté avec succès!",
+          icon: "success",
+        });
         toast.success("Test updated successfully!");
         navigate("/ListTest");
       } else {

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ApiManager from '../../api';
+import Swal from "sweetalert2";
 
 
 //todo : list sport 
@@ -30,15 +31,26 @@ const SportList = () => {
   }, []);
 
   const handleDelete = async (sportId) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+    Swal.fire({
+      title: "Êtes-vous sûr de vouloir supprimer cet élément ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, Supprimer",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
       try {
         await ApiManager.delete(`/Sports/delete/${sportId}`);
         fetchSports();
+        Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
         toast.success("Sport supprimée avec succès !");
       } catch (error) {
+        Swal.fire("Erreur", "Erreur lors de la suppression.", "error");
         toast.error("Erreur lors de la suppression de la sport.");
       }
     }
+    });
     console.log(sportId);
   };
 
@@ -113,7 +125,13 @@ const SportList = () => {
             </div>
             
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update-sport/${sport.id}`}>
+              <Link to={`/update-sport/${sport.id}`} state={{
+                conditionss:sport.conditions,
+                 names: sport.name ,
+                 descriptions:sport.description ,
+                 daysoffs:sport.daysoff , 
+                 nbPlayers:sport.nbPlayer,
+                 referenceSports:sport.referenceSport}  }>
                 <FaRegEdit className='text-graydark cursor-pointer' />
               </Link>
               <RiDeleteBin5Line className='text-red-600 cursor-pointer' onClick={() => handleDelete(sport.id)} />
