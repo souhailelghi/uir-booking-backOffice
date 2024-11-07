@@ -46,8 +46,8 @@ function UpdatePlanning() {
 
       setLoading(true);
       try {
-        const response = await axios.get(
-          `https://localhost:7125/api/Plannings/get-by-id/${id}`
+        const response = await ApiManager.get(
+          `/Plannings/get-by-id/${id}`
         );
         const { day, timeRanges } = response.data;
         console.log("response.data", response.data.timeRanges);

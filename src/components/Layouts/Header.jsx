@@ -1,12 +1,31 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { RxCaretDown } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import UIRRLogo from "../../assets/UIR-Rabat.jpg";
+import ApiManager from "../../api";
+
 
 function Header({ onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+  const [username, setUsername] = useState('');
+
+
+  useEffect(() => {
+    // Retrieve the username from localStorage
+    const storedUsername = localStorage.getItem("username");
+    console.log(storedUsername);
+    
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+
+
+
+
+
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -26,7 +45,7 @@ function Header({ onLogout }) {
           >
             <div className="flex flex-col">
               <span className="text-gray-800 font-semibold">
-                Jaafar TAGMOUTI
+              {username || "Guest"} 
               </span>
               <span className="text-gray-400 text-sm">Admin</span>
             </div>
@@ -44,7 +63,7 @@ function Header({ onLogout }) {
             <button
               className="flex items-center block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full hover:bg-black/10 text-left"
               onClick={() => {
-                console.log("View Profile clicked");
+                console.log("View Profile clicked" );
               }}
             >
               <FaUserCircle className="text-xl text-gray-200 mr-2" />

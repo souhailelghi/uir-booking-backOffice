@@ -21,6 +21,8 @@ function App() {
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
   };
 
