@@ -4,6 +4,7 @@ import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar ,FaSwatchbook , FaPasspo
 import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
 import { MdMeetingRoom, MdSupervisorAccount } from "react-icons/md";
 import UIRRLogo from "../../assets/UIRR.png";
+import "./Sidebar.css";
 
 
 const Sidebar = () => {
@@ -16,7 +17,7 @@ const Sidebar = () => {
   return (
     <div className="flex">
       <div
-        className={`fixed top-0 left-0 h-screen bg-blue-dark text-white ${
+        className={`fixed top-0 left-0 h-screen blue-uir text-white ${
           isOpen ? "w-55" : "w-16"
         } transition-width duration-300`}
       >
@@ -24,17 +25,24 @@ const Sidebar = () => {
           <div className="py-7 px-2">
             <div className="flex items-center justify-between px-4">
               <div className="flex items-center space-x-2">
+              <Link to="/ListReservation" className="font-bold">
+        {/* <p>LOGO</p> */}
+        {/* <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full" /> */}
+        <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  />
+           </Link>
                 {/* <span className="text-2xl font-extrabold text-green">
                   Logo
                 </span> */}
-                <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  />
+              
               </div>
             </div>
             <nav>
               <div className="px-4 mt-10">
+              <Link to="/ListReservation" className="font-bold">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase">
                   Menu
                 </h2>
+                </Link>
                 <ul className="mt-3 space-y-2">
                   <li>
                     <Link
