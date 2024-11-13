@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams  ,useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
+import ApiManager from '../../api';
 
 function AddPlanningForm() {
 
@@ -49,36 +50,33 @@ function AddPlanningForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const planningData = {
       sportId,
       day: parseInt(day, 10),
       timeRanges,
-      dateCreation:new Date().toISOString(),
+      dateCreation: new Date().toISOString(),
     };
-
+  
     try {
-      const response = await fetch('https://localhost:7125/api/Plannings/add-planning', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(planningData),
-      });
-
-      if (response.ok) {
+      const response = await ApiManager.post('/Plannings/add-planning', planningData);
+  
+      if (response.status === 200 || response.status === 201) {
         Swal.fire({
           title: "Planning ajouté avec succès!",
           icon: "success",
         });
-        // alert('Planning added successfully!');
-        navigate(`/planning-list?id=${sportId}`); 
+        navigate(`/planning-list?id=${sportId}`);
       } else {
         alert('Failed to add planning');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error submitting the form');
+      Swal.fire({
+        title: "Erreur réseau!",
+        text: error.message,
+        icon: "error",
+      });
     }
   };
 

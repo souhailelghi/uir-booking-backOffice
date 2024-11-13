@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import ApiManager from '../../api'
 
 const AddSportCategorys = () => {
   // const [firstName, setFirstName] = useState("");
@@ -32,8 +32,8 @@ const AddSportCategorys = () => {
     };
 
     try {
-      const response = await axios.post(
-        "https://localhost:7125/api/SportCategorys/add",
+      const response = await ApiManager.post(
+        "/SportCategorys/add",
         formData
       ); // Correct URL
       if (response.status === 200) {

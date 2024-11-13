@@ -8,6 +8,7 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 
+
 function UpdatePlanning() {
   const location = useLocation();
   const sportIds = location.state?.sportIds;
@@ -46,9 +47,7 @@ function UpdatePlanning() {
 
       setLoading(true);
       try {
-        const response = await ApiManager.get(
-          `/Plannings/get-by-id/${id}`
-        );
+        const response = await ApiManager.get(`/Plannings/get-by-id/${id}` );
         const { day, timeRanges } = response.data;
         console.log("response.data", response.data.timeRanges);
         console.log("**response.data", response.data);
@@ -84,9 +83,7 @@ function UpdatePlanning() {
   const handleRemoveTimeRange = async (id, index) => {
     try {
       setTimeRanges(timeRanges.filter((_, i) => i !== index));
-      const response = await axios.delete(
-        `https://localhost:7125/api/TimeRanges/delete/${id}`
-      );
+      const response = await ApiManager.delete(`/TimeRanges/delete/${id}` );
       console.log("id of time exact", id);
       console.log("index of time exact", index);
       console.log("res delete : ", response);
