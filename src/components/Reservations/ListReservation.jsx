@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
+import Filtrage from "../TableComponent/Filtrage"
+import Pagination from "../TableComponent/Pagination"
 
 function ListReservation() {
   const [reservations, setReservations] = useState([]);
@@ -11,6 +13,13 @@ function ListReservation() {
   const [studentNames, setStudentNames] = useState({});
   const [studentFirstNames, setstudentFirstNames] = useState({});
   const [studentLastName, setstudentLastName] = useState({});
+  const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [selectedSport, setSelectedSport] = useState(null);
+// Pagination 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [requestsPerPage] = useState(2);
+
 
   useEffect(() => {
     fetchReservation();
@@ -20,6 +29,8 @@ function ListReservation() {
     ApiManager.get("/Reservations/list")
       .then((res) => {
         setReservations(res.data);
+        setRequests(res.data);
+        setFilteredRequests(res.data);
         res.data.forEach((reservation) => {
           if (reservation.sportId && !sportNames[reservation.sportId]) {
             fetchSportName(reservation.sportId);
@@ -81,93 +92,77 @@ function ListReservation() {
       }
     }
   };
-
+  const handleSportSelect = (sportId) => {
+    setSelectedSport(sportId);
+  };
+  const indexOfLastRequest = currentPage * requestsPerPage;
+  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
   return (
     <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <div className="flex justify-between items-center mb-6">
-        <h4 className="text-xl font-semibold text-black dark:text-white font-satoshi">
-          List des Reservations
-        </h4>
-      </div>
+  <Filtrage
+    requests={requests}
+    onFilteredRequests={setFilteredRequests}
+    sportNames={sportNames}
+    onSportSelect={handleSportSelect}
+  />
+  <div className="flex justify-between items-center mb-6">
+    <h4 className="text-xl font-semibold text-black dark:text-white font-satoshi">
+      List des Reservations
+    </h4>
+  </div>
 
-      <div className="flex flex-col font-satoshi">
-        <div className="grid grid-cols-2 rounded-sm bg-blue-100 dark:bg-meta-4 text-graydark sm:grid-cols-9"> 
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Student code</h5>
-          </div>
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">first Name</h5>
-          </div>
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">last Name</h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Sport</h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Time</h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Date</h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">List Student</h5>
-          </div>
-        </div>
-
-        {reservations.map((reservation, key) => (
-          <div
-            className={`grid grid-cols-2 sm:grid-cols-9 ${
-              key === reservations.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"
+  <div className="font-satoshi">
+    <table className="w-full table-auto border-collapse border border-stroke dark:border-strokedark">
+      <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
+        <tr>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Student Code</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">First Name</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Last Name</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Sport</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Time</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">Date</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">List Student</th>
+        </tr>
+      </thead>
+      <tbody>
+        {currentRequests.map((reservation, key) => (
+          <tr
+            className={`${
+              key === currentRequests.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"
             }`}
             key={reservation.id}
           >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {studentNames[reservation.studentId] || "Loading..."}
-              </p>
-            </div>
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {studentFirstNames[reservation.studentId] || "Loading..."}
-              </p>
-            </div>
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {studentLastName[reservation.studentId] || "Loading..."}
-              </p>
-            </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {sportNames[reservation.sportId] || "Loading..."}
-              </p>
-            </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">
-                {reservation.hourStart} - {reservation.hourEnd}
-              </p>
-            </div>
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+            <td className="p-2.5 xl:p-5 text-black dark:text-white">
+              {studentNames[reservation.studentId] || "Loading..."}
+            </td>
+            <td className="p-2.5 xl:p-5 text-black dark:text-white">
+              {studentFirstNames[reservation.studentId] || "Loading..."}
+            </td>
+            <td className="p-2.5 xl:p-5 text-black dark:text-white">
+              {studentLastName[reservation.studentId] || "Loading..."}
+            </td>
+            <td className="p-2.5 xl:p-5 text-center text-black dark:text-white">
+              {sportNames[reservation.sportId] || "Loading..."}
+            </td>
+            <td className="p-2.5 xl:p-5 text-center text-black">
+              {reservation.hourStart} - {reservation.hourEnd}
+            </td>
+            <td className="p-2.5 xl:p-5 text-center hidden sm:table-cell text-black dark:text-white">
               {reservation.onlyDate}
-            </div>
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              {/* {reservation.codeUIRList} */}
+            </td>
+            <td className="p-2.5 xl:p-5 text-center hidden sm:table-cell text-black dark:text-white">
               {reservation.codeUIRList ? reservation.codeUIRList.join(" ") : "No codes"}
-            </div>
-
-            {/* <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update/${reservation.id}`}>
-                <FaRegEdit className="text-graydark cursor-pointer" />
-              </Link>
-              <MdDelete
-                className="cursor-pointer text-red-500"
-                onClick={() => handleDelete(reservation.id)}
-              />
-            </div> */}
-          </div>
+            </td>
+          </tr>
         ))}
-      </div>
-    </div>
+      </tbody>
+    </table>
+  </div>
+  <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+</div>
+
   );
 }
 
