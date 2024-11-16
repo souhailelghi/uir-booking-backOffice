@@ -1,25 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin5Line , RiTimeLine } from "react-icons/ri";
+import { RiDeleteBin5Line, RiTimeLine } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ApiManager from '../../api';
 import Swal from "sweetalert2";
+import Pagination from '../../components/TableComponent/Pagination';
+import Filtrage from '../../components/TableComponent/Filtrage';
 
-
-//todo : list sport 
 const SportList = () => {
   const [listData, setListData] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [requestsPerPage] = useState(6);
   const navigate = useNavigate();
+  
+  const [requests, setRequests] = useState([]);
+  const [sportNames, setSportNames] = useState({});
+  const [selectedSport, setSelectedSport] = useState(null);
 
+ 
   const fetchSports = async () => {
     try {
-      const response = await ApiManager.get('/Sports/list');
-      console.log(response.data);
+      console.log("selectedSport from method fetch Sports : ," , selectedSport);
       
+      const endpoint = selectedSport
+      ?   `/Sports/category/${selectedSport}` 
+      : '/Sports/list' ;
+      // /Sports/category//${sportId}
+      const response = await ApiManager.get(endpoint);
       setListData(response.data);
-      
+    
+      //todo : ;;
+      // setReservations(response.data);
+      setRequests(response.data);
+      setFilteredRequests(response.data);
+     
+      console.log('list of reservations : ' , response.data);
     } catch (error) {
       console.error('Error fetching sports:', error);
       toast.error('Erreur lors de la récupération des sports.');
@@ -28,7 +46,7 @@ const SportList = () => {
 
   useEffect(() => {
     fetchSports();
-  }, []);
+  }, [selectedSport]);
 
   const handleDelete = async (sportId) => {
     Swal.fire({
@@ -40,113 +58,102 @@ const SportList = () => {
       confirmButtonText: "Oui, Supprimer",
     }).then(async (result) => {
       if (result.isConfirmed) {
-      try {
-        await ApiManager.delete(`/Sports/delete/${sportId}`);
-        fetchSports();
-        Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
-        toast.success("Sport supprimée avec succès !");
-      } catch (error) {
-        Swal.fire("Erreur", "Erreur lors de la suppression.", "error");
-        toast.error("Erreur lors de la suppression de la sport.");
+        try {
+          await ApiManager.delete(`/Sports/delete/${sportId}`);
+          fetchSports();
+          Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
+          toast.success("Sport supprimée avec succès !");
+        } catch (error) {
+          Swal.fire("Erreur", "Erreur lors de la suppression.", "error");
+          toast.error("Erreur lors de la suppression de la sport.");
+        }
       }
-    }
     });
-    console.log(sportId);
-  };
-
-  // add time to sport : 
-  const handleAddTime = async (sportId) => {
-    // if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
-    //   try {
-    //     await ApiManager.delete(`/Sports/delete/${sportId}`);
-    //     fetchSports();
-    //     toast.success("Salle supprimée avec succès !");
-    //   } catch (error) {
-    //     toast.error("Erreur lors de la suppression de la salle.");
-    //   }
-    // }
-    console.log(sportId);
   };
 
   const handleFetchClick = (id) => {
-    navigate(`/planning-list?id=${id}`); // Navigate with the sport ID
-    console.log("sport",id);
+    navigate(`/planning-list?id=${id}`);
+  };
+  
+  //todo : Pagination 
+  const indexOfLastRequest = currentPage * requestsPerPage;
+  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+  
+
+
+  const handleSportSelect = (sportId) => {
+    setSelectedSport(sportId);
+    console.log("sportId : from sport list " ,sportId);
+    console.log("selectedSport : from sport list " ,selectedSport);
+    
   };
 
+
   return (
-    <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default">
+        <Filtrage
+    requests={requests}
+    onFilteredRequests={setFilteredRequests}
+    sportNames={sportNames}
+    onSportSelect={handleSportSelect}
+  />
       <div className="flex justify-between items-center mb-6">
-        <h4 className="text-xl font-semibold text-black dark:text-white font-satoshi">
-          Sports
-        </h4>
+        <h4 className="text-xl font-semibold">Sports</h4>
         <button
           onClick={() => navigate('/add-sport')}
-          className="px-4 py-2 bg-blue-950 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          className="px-4 py-2 bg-blue-950 text-white rounded-md"
         >
           Ajouter Sport
         </button>
       </div>
 
-      <div className="flex flex-col font-satoshi">
-        <div className="grid grid-cols-3 rounded-sm bg-blue-100 dark:bg-meta-4 text-graydark sm:grid-cols-4">
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Nom de la sport
-            </h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              day off
-            </h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Capacité
-            </h5>
-          </div>
-          
-        </div>
-
-        {listData.map((sport, key) => (
-          <div
-            className={`grid grid-cols-3 sm:grid-cols-4 ${key === listData.length - 1 ? '' : 'border-b border-stroke dark:border-strokedark'}`}
-            key={sport.id}
-          >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <p className="hidden text-black dark:text-white sm:block font-semibold">
-                {sport.name}
-              </p>
-            </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">{sport.description == 0?"Salle Normale" : sport.daysoff}</p>
-            </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black">{sport.nbPlayer}</p>
-            </div>
-            
-            <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update-sport/${sport.id}`} state={{
-                conditionss:sport.conditions,
-                 names: sport.name ,
-                 descriptions:sport.description ,
-                 daysoffs:sport.daysoff , 
-                 nbPlayers:sport.nbPlayer,
-                 referenceSports:sport.referenceSport}  }>
-                <FaRegEdit className='text-graydark cursor-pointer' />
-              </Link>
-              <RiDeleteBin5Line className='text-red-600 cursor-pointer' onClick={() => handleDelete(sport.id)} />
-             
-              <RiTimeLine className='text-red-500 cursor-pointer' onClick={() => handleFetchClick(sport.id)} />
-                
-                {/* <button className="btn btn-secondary" onClick={() => handleFetchClick(room.id)}>
-                  Fetch all Date Hours By Id
-                </button> */}
-              
-            </div>
-          </div>
-        ))}
+      <div className="overflow-x-auto">
+        {currentRequests.length > 0 ? (
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
+              <tr >
+                <th className="p-2.5 xl:p-5">Nom de la sport</th>
+                <th className="p-2.5 xl:p-5 text-center">Day Off</th>
+                <th className="p-2.5 xl:p-5 text-center">Capacité</th>
+                <th className="p-2.5 xl:p-5 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentRequests.map((sport, key) => (
+                <tr key={sport.id} className='border-b border-stroke dark:border-strokedark' >
+                  <td className="p-2.5 xl:p-5">{sport.name}</td>
+                  <td className="p-2.5 xl:p-5 text-center">{sport.daysoff}</td>
+                  <td className="p-2.5 xl:p-5 text-center">{sport.nbPlayer}</td>
+                  <td className="p-2.5 xl:p-5 flex justify-center gap-3 text-2xl">
+                    <Link to={`/update-sport/${sport.id}`}>
+                      <FaRegEdit className="text-graydark cursor-pointer" />
+                    </Link>
+                    <RiDeleteBin5Line
+                      className="text-red-600 cursor-pointer"
+                      onClick={() => handleDelete(sport.id)}
+                    />
+                    <RiTimeLine
+                      className="text-red-500 cursor-pointer"
+                      onClick={() => handleFetchClick(sport.id)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-center py-4">Aucun sport disponible.</p>
+        )}
       </div>
+
       <ToastContainer />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

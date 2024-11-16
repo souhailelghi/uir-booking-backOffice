@@ -67,7 +67,7 @@ function Dropdown({ onSportSelect , onFilterListSports}) {
         value={selectedSport || ""}
         onChange={handleSportSelection}
       >
-        <option value="" className="blue-txt text-center">-- Sélectionnez un sport --</option>
+        <option value="" className="blue-txt text-center">-- Sélectionnez Category --</option>
         {sports.map((sport) => (
           <option key={sport.id} value={sport.id}>{sport.name}</option>
         ))}
