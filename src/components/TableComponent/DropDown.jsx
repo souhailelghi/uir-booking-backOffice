@@ -13,12 +13,11 @@ function Dropdown({ onSportSelect , onFilterListSports}) {
     const fetchSports = async () => {
       try {
         setLoading(true);
-        const response = await ApiSystem.get("/SportCategorys/list");
+        const response = await ApiManager.get("/SportCategorys/list");
         setSportsLocal(response.data);
-    
-        
+
       } catch (error) {
-        console.log("Failed to load sports");
+        console.log("Failed to load sports ");
       } finally {
         setLoading(false);
         

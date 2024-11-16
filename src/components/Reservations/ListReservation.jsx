@@ -18,31 +18,58 @@ function ListReservation() {
   const [selectedSport, setSelectedSport] = useState(null);
 // Pagination 
   const [currentPage, setCurrentPage] = useState(1);
-  const [requestsPerPage] = useState(2);
+  const [requestsPerPage] = useState(3);
 
 
   useEffect(() => {
     fetchReservation();
-  }, []);
+  }, [selectedSport]);
 
-  const fetchReservation = () => {
-    ApiManager.get("/Reservations/list")
-      .then((res) => {
-        setReservations(res.data);
-        setRequests(res.data);
-        setFilteredRequests(res.data);
-        res.data.forEach((reservation) => {
-          if (reservation.sportId && !sportNames[reservation.sportId]) {
-            fetchSportName(reservation.sportId);
-          }
-          if (reservation.studentId && !studentNames[reservation.studentId]) {
-            fetchStudentName(reservation.studentId);
-          }
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+  const fetchReservation = async () => {
+
+    //todo : --------------
+    try {
+      const endpoint = selectedSport
+      ? `/Reservations/BySportCategoryId/${selectedSport}`
+      : "/Reservations/list";
+   
+      const response = await ApiManager.get(endpoint);
+      // setSportsLocal(response.data);
+      setReservations(response.data);
+      setRequests(response.data);
+      setFilteredRequests(response.data);
+      response.data.forEach((reservation) => {
+        if (reservation.sportId && !sportNames[reservation.sportId]) {
+          fetchSportName(reservation.sportId);
+        }
+        if (reservation.studentId && !studentNames[reservation.studentId]) {
+          fetchStudentName(reservation.studentId);
+        }
       });
+      console.log('list of reservations : ' , response.data);
+      
+
+    } catch (error) {
+      console.log("Failed to load sports ");
+    }
+    //todo : --------------
+    // ApiManager.get("/Reservations/list")
+    //   .then((res) => {
+    //     setReservations(res.data);
+    //     setRequests(res.data);
+    //     setFilteredRequests(res.data);
+    //     res.data.forEach((reservation) => {
+    //       if (reservation.sportId && !sportNames[reservation.sportId]) {
+    //         fetchSportName(reservation.sportId);
+    //       }
+    //       if (reservation.studentId && !studentNames[reservation.studentId]) {
+    //         fetchStudentName(reservation.studentId);
+    //       }
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const fetchSportName = async (sportId) => {
