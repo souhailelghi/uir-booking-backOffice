@@ -14,9 +14,12 @@ function Filtrage({ onFilteredRequests, requests, sportNames, onSportSelect }) {
   // Function to filter requests based on selected filters
   const filterRequests = () => {
     const filteredRequests = requests.filter(request => {
-      const sportName = sportNames[request.sportId]?.toLowerCase() || '';
+      // Combine sport names from request and sportNames
+      const sportName = `${request.name?.toLowerCase() || ''} ${sportNames[request.sportId]?.toLowerCase() || ''}`.trim();
       const searchText = filterText.toLowerCase();
+      
       return (
+        // Check if the searchText matches any part of sportName or trainee name
         (request.nameTrainee?.toLowerCase().includes(searchText) || sportName.includes(searchText)) &&
         (filterType === '' || request.documentType === filterType) &&
         (filterStatus === '' || request.documentStatus.toString() === filterStatus) &&
@@ -25,6 +28,7 @@ function Filtrage({ onFilteredRequests, requests, sportNames, onSportSelect }) {
     });
     onFilteredRequests(filteredRequests);
   };
+  
 
   // useEffect to call filterRequests whenever filter criteria change
   useEffect(() => {
