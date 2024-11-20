@@ -37,7 +37,7 @@ const UpdateSport = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    if (!name || !categorieId) {
+    if (!name ) {
       Swal.fire({
         title: "Please fill in all required fields!",
         icon: "error",
@@ -101,7 +101,7 @@ const UpdateSport = () => {
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
-                <div className="w-full sm:w-1/2 mb-4">
+                {/* <div className="w-full sm:w-1/2 mb-4">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Catégorie sportive <span className="text-meta-1">*</span>
                   </label>
@@ -120,7 +120,7 @@ const UpdateSport = () => {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
               </div>
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2 mb-4">
