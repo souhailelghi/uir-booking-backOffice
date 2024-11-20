@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line, RiTimeLine } from "react-icons/ri";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Link, useNavigate } from 'react-router-dom';
-import ApiManager from '../../api';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Link, useNavigate } from "react-router-dom";
+import ApiManager from "../../api";
 import Swal from "sweetalert2";
-import Pagination from '../../components/TableComponent/Pagination';
-import Filtrage from '../../components/TableComponent/Filtrage';
+import Pagination from "../../components/TableComponent/Pagination";
+import Filtrage from "../../components/TableComponent/Filtrage";
 
 const SportList = () => {
   const [listData, setListData] = useState([]);
@@ -15,32 +15,31 @@ const SportList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(6);
   const navigate = useNavigate();
-  
+
   const [requests, setRequests] = useState([]);
   const [sportNames, setSportNames] = useState({});
   const [selectedSport, setSelectedSport] = useState(null);
 
- 
   const fetchSports = async () => {
     try {
-      console.log("selectedSport from method fetch Sports : ," , selectedSport);
-      
+      console.log("selectedSport from method fetch Sports : ,", selectedSport);
+
       const endpoint = selectedSport
-      ?   `/Sports/category/${selectedSport}` 
-      : '/Sports/list' ;
+        ? `/Sports/category/${selectedSport}`
+        : "/Sports/list";
       // /Sports/category//${sportId}
       const response = await ApiManager.get(endpoint);
       setListData(response.data);
-    
+
       //todo : ;;
       // setReservations(response.data);
       setRequests(response.data);
       setFilteredRequests(response.data);
-     
-      console.log('list of reservations : ' , response.data);
+
+      console.log("list of reservations : ", response.data);
     } catch (error) {
-      console.error('Error fetching sports:', error);
-      toast.error('Erreur lors de la récupération des sports.');
+      console.error("Error fetching sports:", error);
+      toast.error("Erreur lors de la récupération des sports.");
     }
   };
 
@@ -74,35 +73,34 @@ const SportList = () => {
   const handleFetchClick = (id) => {
     navigate(`/planning-list?id=${id}`);
   };
-  
-  //todo : Pagination 
+
+  //todo : Pagination
   const indexOfLastRequest = currentPage * requestsPerPage;
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
-  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const currentRequests = filteredRequests.slice(
+    indexOfFirstRequest,
+    indexOfLastRequest
+  );
   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
-  
-
 
   const handleSportSelect = (sportId) => {
     setSelectedSport(sportId);
-    console.log("sportId : from sport list " ,sportId);
-    console.log("selectedSport : from sport list " ,selectedSport);
-    
+    console.log("sportId : from sport list ", sportId);
+    console.log("selectedSport : from sport list ", selectedSport);
   };
-
 
   return (
     <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default">
-        <Filtrage
-    requests={requests}
-    onFilteredRequests={setFilteredRequests}
-    sportNames={sportNames}
-    onSportSelect={handleSportSelect}
-  />
+      <Filtrage
+        requests={requests}
+        onFilteredRequests={setFilteredRequests}
+        sportNames={sportNames}
+        onSportSelect={handleSportSelect}
+      />
       <div className="flex justify-between items-center mb-6">
         <h4 className="text-xl font-semibold">Sports</h4>
         <button
-          onClick={() => navigate('/add-sport')}
+          onClick={() => navigate("/add-sport")}
           className="px-4 py-2 bg-blue-950 text-white rounded-md"
         >
           Ajouter Sport
@@ -113,21 +111,51 @@ const SportList = () => {
         {currentRequests.length > 0 ? (
           <table className="w-full text-left border-collapse">
             <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
-              <tr >
+              <tr>
                 <th className="p-2.5 xl:p-5">Nom de la sport</th>
                 <th className="p-2.5 xl:p-5 text-center">Day Off</th>
+                <th className="p-2.5 xl:p-5 text-center">description</th>
+                <th className="p-2.5 xl:p-5 text-center">conditions</th>
                 <th className="p-2.5 xl:p-5 text-center">Capacité</th>
+                <th className="p-2.5 xl:p-5 text-center">referenceSport</th>
+                <th className="p-2.5 xl:p-5 text-center">image</th>
                 <th className="p-2.5 xl:p-5 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {currentRequests.map((sport, key) => (
-                <tr key={sport.id} className='border-b border-stroke dark:border-strokedark' >
+                <tr
+                  key={sport.id}
+                  className="border-b border-stroke dark:border-strokedark"
+                >
                   <td className="p-2.5 xl:p-5">{sport.name}</td>
                   <td className="p-2.5 xl:p-5 text-center">{sport.daysoff}</td>
+                  <td className="p-2.5 xl:p-5 text-center">{sport.description}</td>
+                  <td className="p-2.5 xl:p-5 text-center">{sport.conditions}</td>
                   <td className="p-2.5 xl:p-5 text-center">{sport.nbPlayer}</td>
+                  <td className="p-2.5 xl:p-5 text-center">
+                    {sport.referenceSport}
+                  </td>
+                  <td className="p-2.5 xl:p-5 text-center">
+                    <img
+                      src={
+                        sport.image
+                          ? `data:image/png;base64,${sport.image}`
+                          : "placeholder.png"
+                      }
+                      alt="no image"
+                      className="w-24 h-24 object-cover rounded-md mx-auto mb-2"
+                    />
+                  </td>
                   <td className="p-2.5 xl:p-5 flex justify-center gap-3 text-2xl">
-                    <Link to={`/update-sport/${sport.id}`}>
+                    <Link to={`/update-sport/${sport.id}`} state={{
+                conditionss:sport.conditions,
+                 names: sport.name ,
+                 descriptions:sport.description ,
+                 daysoffs:sport.daysoff , 
+                 nbPlayers:sport.nbPlayer,
+                 referenceSports:sport.referenceSport,
+                  images: sport.image}  }>
                       <FaRegEdit className="text-graydark cursor-pointer" />
                     </Link>
                     <RiDeleteBin5Line

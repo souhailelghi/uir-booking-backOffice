@@ -10,25 +10,25 @@ const UpdateSport = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [categorieId, setCategorieId] = useState("");
+  const [categorieId, setCategorieId] = useState(location.state?.categorieId || "");
   const [referenceSport, setReferenceSport] = useState(location.state?.referenceSports || "");
   const [nbPlayer, setNbPlayer] = useState(location.state?.nbPlayers || "");
   const [daysoff, setDaysoff] = useState(location.state?.daysoffs || "");
   const [conditions, setConditions] = useState(location.state?.conditionss || "");
   const [name, setName] = useState(location.state?.names || "");
+  const [image, setImage] = useState(location.state?.images || "");
   const [description, setDescription] = useState(location.state?.descriptions || "");
   const [imageUpload, setImageUpload] = useState(null);
   const [sportCategories, setSportCategories] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // Fetch sports categories
     const fetchSportCategories = async () => {
       try {
         const response = await ApiManager.get("/SportCategorys/list");
         setSportCategories(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des catégories sportives:", error);
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to fetch sport categories.");
       }
     };
     fetchSportCategories();
@@ -36,49 +36,59 @@ const UpdateSport = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!name) {
+  
+    if (!name || !categorieId) {
       Swal.fire({
-        title: "Assurez-vous de remplir tout!",
+        title: "Please fill in all required fields!",
         icon: "error",
       });
       return;
     }
-
-
-    const formData = {
-      id,
-      categorieId,
-      referenceSport,
-      nbPlayer,
-      daysoff,
-      conditions,
-      name,
-      description,
-      imageUpload
-    };
-
+  
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("categorieId", categorieId);
+    formData.append("referenceSport", referenceSport);
+    formData.append("nbPlayer", nbPlayer);
+    formData.append("daysoff", daysoff);
+    formData.append("conditions", conditions);
+    formData.append("name", name);
+    formData.append("description", description);
+  
+    // If new image is uploaded, append it; otherwise, append existing image
+    if (imageUpload) {
+      formData.append("imageUpload", imageUpload);
+    } else if (image) {
+      formData.append("existingImage", image); // Backend should handle this
+    }
+  
     try {
-      const response = await ApiManager.put(`/Sports/update`, formData);
+      const response = await ApiManager.put(`/Sports/update`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
       if (response.status === 200) {
-        toast.success("Sport mise à jour avec succès!");
+        toast.success("Sport updated successfully!");
         Swal.fire({
-          title: "Sport  mis à jour avec succès!",
+          title: "Sport updated successfully!",
           icon: "success",
         });
-        navigate('/sport-list');
+        navigate("/sport-list");
       } else {
+        toast.error("Error updating sport.");
         Swal.fire({
-          title: "Erreur lors de la mise à jour du Sport !",
+          title: "Error updating sport.",
           icon: "error",
         });
-        toast.error("Erreur lors de la mise à jour de la sport!");
       }
     } catch (error) {
-      console.error('Error updating sport:', error);
-      toast.error(`Erreur réseau! ${error.message}`);
+      console.error("Error updating sport:", error);
+      toast.error("Network error: " + error.message);
     }
   };
-
+  
   return (
     <div className="m-0 mt-6 gap-9 sm:grid-cols-2 m-16">
       <div className="flex flex-col gap-9">
@@ -184,17 +194,33 @@ const UpdateSport = () => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Image <span className="text-meta-1">*</span>
-                </label>
-                <input
-                  type="file"
-                  onChange={(e) => setImageUpload(e.target.files[0])}
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
-                  required
-                />
-              </div>
+
+                 {/* Other Input Fields */}
+                    {/* Image Upload */}
+                    <div className="flex flex-col mb-4.5">
+  <label className="mb-2.5 block text-black dark:text-white">
+    Image <span className="text-meta-1">*</span>
+  </label>
+  {image && (
+    <img
+      src={imageUpload ? URL.createObjectURL(imageUpload) : (image.startsWith("data:") ? image : `data:image/png;base64,${image}`)}
+      alt="Sport"
+      className="w-24 h-24 object-cover rounded-md mb-2"
+    />
+  )}
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      if (e.target.files && e.target.files[0]) {
+        setImageUpload(e.target.files[0]);
+      }
+    }}
+    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
+  />
+</div>
+
+               {/* Image Upload */}
               <div className="flex justify-end gap-4.5 mt-4">
                 <button
                   type="button"
