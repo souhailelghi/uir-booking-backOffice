@@ -39,11 +39,11 @@ function ListReservation() {
       setRequests(response.data);
       setFilteredRequests(response.data);
       response.data.forEach((reservation) => {
-        if (reservation.sportId && !sportNames[reservation.sportId]) {
-          fetchSportName(reservation.sportId);
+        if (reservation.codeUIR && !sportNames[reservation.codeUIR]) {
+          fetchSportName(reservation.codeUIR);
         }
-        if (reservation.studentId && !studentNames[reservation.studentId]) {
-          fetchStudentName(reservation.studentId);
+        if (reservation.codeUIR && !studentNames[reservation.studentId]) {
+          fetchStudentName(reservation.codeUIR);
         }
       });
       console.log('list of reservations : ' , response.data);
@@ -53,23 +53,7 @@ function ListReservation() {
       console.log("Failed to load sports ");
     }
     //todo : --------------
-    // ApiManager.get("/Reservations/list")
-    //   .then((res) => {
-    //     setReservations(res.data);
-    //     setRequests(res.data);
-    //     setFilteredRequests(res.data);
-    //     res.data.forEach((reservation) => {
-    //       if (reservation.sportId && !sportNames[reservation.sportId]) {
-    //         fetchSportName(reservation.sportId);
-    //       }
-    //       if (reservation.studentId && !studentNames[reservation.studentId]) {
-    //         fetchStudentName(reservation.studentId);
-    //       }
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  
   };
 
   const fetchSportName = async (sportId) => {
@@ -84,23 +68,20 @@ function ListReservation() {
     }
   };
 
-  const fetchStudentName = async (studentId) => {
+  const fetchStudentName = async (codeUIR) => {
     try {
-      const response = await ApiManager.get(`/Students/student/${studentId}`);
+      const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`);
 
 
-      setStudentNames((prevStudentNames) => ({
-        ...prevStudentNames,
-        [studentId]: response.data.codeUIR,
-      }));
+    
 
       setstudentFirstNames((prevStudentNames) => ({
         ...prevStudentNames,
-        [studentId]: response.data.firstName,
+        [codeUIR]: response.data.firstName,
       }));
       setstudentLastName((prevStudentNames) => ({
         ...prevStudentNames,
-        [studentId]: response.data.lastName,
+        [codeUIR]: response.data.lastName,
       }));
 
     } catch (error) {
@@ -164,13 +145,13 @@ function ListReservation() {
             key={reservation.id}
           >
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
-              {studentNames[reservation.studentId] || "Loading..."}
+              {reservation.codeUIR || "Loading..."}
             </td>
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
-              {studentFirstNames[reservation.studentId] || "Loading..."}
+              {studentFirstNames[reservation.codeUIR] || "Loading..."}
             </td>
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
-              {studentLastName[reservation.studentId] || "Loading..."}
+              {studentLastName[reservation.codeUIR] || "Loading..."}
             </td>
             <td className="p-2.5 xl:p-5 text-center text-black dark:text-white">
               {sportNames[reservation.sportId] || "Loading..."}
