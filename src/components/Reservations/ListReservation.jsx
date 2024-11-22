@@ -39,6 +39,9 @@ function ListReservation() {
       setRequests(response.data);
       setFilteredRequests(response.data);
       response.data.forEach((reservation) => {
+        if (reservation.sportId && !sportNames[reservation.sportId]) {
+          fetchSportName(reservation.sportId);
+        }
         if (reservation.codeUIR && !sportNames[reservation.codeUIR]) {
           fetchSportName(reservation.codeUIR);
         }
