@@ -14,6 +14,7 @@ const SportList = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(6);
+  const [expandedCard, setExpandedCard] = useState(null);
   const navigate = useNavigate();
 
   const [requests, setRequests] = useState([]);
@@ -131,7 +132,25 @@ const SportList = () => {
                   <td className="p-2.5 xl:p-5">{sport.name}</td>
                   <td className="p-2.5 xl:p-5 text-center">{sport.daysoff}</td>
                   <td className="p-2.5 xl:p-5 text-center">{sport.description}</td>
-                  <td className="p-2.5 xl:p-5 text-center">{sport.conditions}</td>
+                  <td className="p-2.5 xl:p-5 text-center"><p className="text-sm ">
+                            {expandedCard === sport.id
+                              ? sport.conditions // Show the full text if expanded
+                              : `${sport.conditions.slice(0, 30)}...`}{" "}
+                            {/* Show first 30 characters */}
+                            <button
+                              className="text-blue-400 ml-2"
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent triggering onClick of the parent
+                                setExpandedCard(
+                                  expandedCard === sport.id ? null : sport.id
+                                );
+                              }}
+                            >
+                              {expandedCard === sport.id
+                                ? "See Less"
+                                : "See More"}
+                            </button>
+                          </p></td>
                   <td className="p-2.5 xl:p-5 text-center">{sport.nbPlayer}</td>
                   <td className="p-2.5 xl:p-5 text-center">
                     {sport.referenceSport}

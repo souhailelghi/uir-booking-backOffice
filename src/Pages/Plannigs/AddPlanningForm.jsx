@@ -74,7 +74,7 @@ function AddPlanningForm() {
       console.error('Error:', error);
       Swal.fire({
         title: "Erreur réseau!",
-        text: error.message,
+        text: error.response.data,
         icon: "error",
       });
     }
