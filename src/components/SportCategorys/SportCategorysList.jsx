@@ -98,7 +98,7 @@ const SportCategorysList = () => {
                     </div>
           
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
-              <Link to={`/update/${list.id}`}>
+              <Link to={`/update/${list.id}`}   state={{names: list.name , images: list.image}  }>
                 <FaRegEdit className="text-graydark cursor-pointer" />
               </Link>
               <button

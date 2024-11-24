@@ -28,8 +28,6 @@ const AddSportCategorys = () => {
       dateCreation:"",
       dateModification:""
 
-
-
     };
 
     try {

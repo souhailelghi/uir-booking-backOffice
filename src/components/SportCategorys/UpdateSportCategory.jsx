@@ -6,8 +6,10 @@ import ApiManager from "../../api";
 const UpdateSportCategory = () => {
   const { id } = useParams();
   const [lastName, setLastName] = useState("");
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [image, setImage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,8 +19,11 @@ const UpdateSportCategory = () => {
       try {
         const response = await ApiManager.get(`/SportCategorys/${id}`);
         const { name } = response.data;
+        const { image } = response.data;
         setLastName(name);
-        setErrorMessage('');
+        setImage(image);
+
+        setErrorMessage("");
       } catch (error) {
         console.error("Error fetching Sport Category:", error);
         Swal.fire({
@@ -32,6 +37,57 @@ const UpdateSportCategory = () => {
     fetchSportCategoryById();
   }, [id]);
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   if (!lastName) {
+  //     Swal.fire({
+  //       title: "Assurez-vous de remplir tout!",
+  //       icon: "error",
+  //     });
+  //     return;
+  //   }
+
+  //   const formData = {
+  //     id: id,
+  //     name: lastName,
+  //     imageUpload: image,
+  //     description:"",
+  //     dateCreation:"",
+  //     dateModification:""
+  //   };
+
+  //   try {
+  //     const response = await ApiManager.put(
+  //       `/SportCategorys/update`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       Swal.fire({
+  //         title: "Sport Category mis à jour avec succès!",
+  //         icon: "success",
+  //       });
+  //       navigate("/SportCategorys");
+  //     } else {
+  //       Swal.fire({
+  //         title: "Erreur lors de la mise à jour du Sport Category!",
+  //         icon: "error",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       title: "Erreur réseau!",
+  //       text: error.message,
+  //       icon: "error",
+  //     });
+  //   }
+  // };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!lastName) {
@@ -42,14 +98,12 @@ const UpdateSportCategory = () => {
       return;
     }
 
-    const formData = {
-      id: id,
-      name: lastName,
-      image: "",
-      description:"",
-      dateCreation:"",
-      dateModification:""
-    };
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("name", lastName);
+    if (imageUpload) {
+      formData.append("imageUpload", imageUpload);
+    }
 
     try {
       const response = await ApiManager.put(
@@ -57,10 +111,11 @@ const UpdateSportCategory = () => {
         formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+
       if (response.status === 200) {
         Swal.fire({
           title: "Sport Category mis à jour avec succès!",
@@ -106,6 +161,36 @@ const UpdateSportCategory = () => {
                     required
                     onChange={(e) => setLastName(e.target.value)}
                   />
+                </div>
+
+                <div className="w-full sm:w-1/2">
+                  <label className="mt-8 mb-2.5 block text-black dark:text-white">
+                    Sport Category Image<span className="text-meta-1">*</span>
+                  </label>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setImageUpload(e.target.files[0]);
+                      }
+                    }}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
+                  />
+                  {image && (
+                    <img
+                      src={
+                        imageUpload
+                          ? URL.createObjectURL(imageUpload)
+                          : image.startsWith("data:")
+                          ? image
+                          : `data:image/png;base64,${image}`
+                      }
+                      alt="Sport"
+                      className="w-24 h-24 object-cover rounded-md mb-2"
+                    />
+                  )}
                 </div>
               </div>
               <div className="flex justify-end gap-4.5">
