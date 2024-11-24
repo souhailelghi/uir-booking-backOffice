@@ -18,19 +18,20 @@ function AddPlanningForm() {
   const getDayName = (day) => {
     switch (day) {
       case 0:
-        return "Lundi";
-      case 1:
-        return "Mardi";
-      case 2:
-        return "Mercredi";
-      case 3:
-        return "Jeudi";
-      case 4:
-        return "Vendredi";
-      case 5:
-        return "Samedi";
-      case 6:
         return "Dimanche";
+      case 1:
+        return "Lundi";
+      case 2:
+        return "Mardi";
+      case 3:
+        return "Mercredi";
+      case 4:
+        return "Jeudi";
+      case 5:
+        return "Vendredi";
+      case 6:
+        return "Samedi";
+    
       default:
         return "Unknown Day";
     }
@@ -105,14 +106,17 @@ function AddPlanningForm() {
 
       <div>
         <label>Day:</label>
-        <select value={day}  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary" onChange={(e) => setDay(parseInt(e.target.value))} required>
+        <select value={day}  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary" onChange={(e) => {  const newValue = parseInt(e.target.value, 10);
+    console.log("Selected Day Value:", newValue);
+    setDay(newValue);}} required>
+          <option value={6}>{getDayName(6)}</option>
           <option value={0}>{getDayName(0)}</option>
           <option value={1}>{getDayName(1)}</option>
           <option value={2}>{getDayName(2)}</option>
           <option value={3}>{getDayName(3)}</option>
           <option value={4}>{getDayName(4)}</option>
           <option value={5}>{getDayName(5)}</option>
-          <option value={6}>{getDayName(6)}</option>
+    
         </select>
       </div>
 

@@ -4,14 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import ApiManager from '../../api'
 
 const AddSportCategorys = () => {
-  // const [firstName, setFirstName] = useState("");
+
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
+  const [imageUpload, setImageUpload] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!name ) {
+    if (!name || !imageUpload ) {
       Swal.fire({
         title: "Assurez-vous de remplir tout!",
         icon: "error",
@@ -22,7 +23,7 @@ const AddSportCategorys = () => {
     const formData = {
       mydate: "",
       name: name,
-      image: "",
+      imageUpload: imageUpload,
       description:"",
       dateCreation:"",
       dateModification:""
@@ -34,8 +35,14 @@ const AddSportCategorys = () => {
     try {
       const response = await ApiManager.post(
         "/SportCategorys/add",
-        formData
-      ); // Correct URL
+        formData , {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        } ); // Correct URL
+
+
+        
       if (response.status === 200) {
         Swal.fire({
           title: " Sport Categorys ajouté avec succès!",
@@ -81,6 +88,16 @@ const AddSportCategorys = () => {
                     required
                     onChange={(e) => setName(e.target.value)}
                   />
+                     <label className="mt-8 mb-2.5 block text-black dark:text-white">
+                    Image <span className="text-meta-1">*</span>
+                  </label>
+               
+                     <input
+                  type="file"
+                  onChange={(e) => setImageUpload(e.target.files[0])}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
+                  required
+                />
                 </div>
               </div>
               

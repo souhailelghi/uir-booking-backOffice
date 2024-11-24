@@ -65,6 +65,11 @@ const SportCategorysList = () => {
             Categorys
             </h5>
           </div>
+          <div className="p-2.5 xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Image
+            </h5>
+          </div>
          
         </div>
 
@@ -77,7 +82,20 @@ const SportCategorysList = () => {
               <p className="hidden text-black dark:text-white sm:block font-semibold">
                 {list.name} 
               </p>
+
             </div>
+            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+
+            <img
+                  src={
+                    list.image
+                      ? `data:image/png;base64,${list.image}`
+                      : "placeholder.png"
+                    }
+                    alt={list.name}
+                  className="w-12 h-12 rounded-full bg-[#1E3B8B]/10 flex items-center justify-center"
+                />
+                    </div>
           
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
               <Link to={`/update/${list.id}`}>
