@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiManager from "../../api";
 import { Link } from "react-router-dom";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegListAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Filtrage from "../TableComponent/Filtrage"
@@ -137,6 +137,7 @@ function ListReservation() {
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Time</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">Date</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">List Student</th>
+          <th className="p-2.5 xl:p-5 text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -168,6 +169,13 @@ function ListReservation() {
             <td className="p-2.5 xl:p-5 text-center hidden sm:table-cell text-black dark:text-white">
               {reservation.codeUIRList ? reservation.codeUIRList.join(" ") : "No codes"}
             </td>
+            <td className="p-2.5 xl:p-5 flex justify-center gap-3 text-2xl">
+                
+                  <Link  to={`/checklist/${reservation.id}`}    >
+                      <FaRegListAlt className="text-graydark cursor-pointer" />
+                    </Link>
+                  
+                  </td>
           </tr>
         ))}
       </tbody>

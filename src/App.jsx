@@ -14,6 +14,7 @@ import PlaningsList from "./Pages/Sports/PlaningsList.jsx";
 import AddPlanningForm from "./Pages/Plannigs/AddPlanningForm";
 import UpdatePlanning from "./Pages/Plannigs/UpdatePlanning.jsx";
 import LoginSignUp from "./LoginSignUp/loginSignUp.jsx";
+import Checklist from "./components/Reservations/Checklist.jsx"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/add-planning-form" element={<AddPlanningForm />} />
                 <Route path="/sport-list" element={<SportList />} />
                 <Route path="/update-sport/:id" element={<UpdateSport />} />
+                <Route path="/checklist/:id" element={<Checklist />} />
                 <Route path="/update-planning/:id" element={<UpdatePlanning />} />
               </Routes>
             </div>
