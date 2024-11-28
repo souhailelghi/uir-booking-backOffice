@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import ApiManager from "../../api";
