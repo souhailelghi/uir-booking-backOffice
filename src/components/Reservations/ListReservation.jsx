@@ -42,14 +42,14 @@ function ListReservation() {
         if (reservation.sportId && !sportNames[reservation.sportId]) {
           fetchSportName(reservation.sportId);
         }
-        if (reservation.codeUIR && !sportNames[reservation.codeUIR]) {
-          fetchSportName(reservation.codeUIR);
-        }
+        // if (reservation.codeUIR && !sportNames[reservation.codeUIR]) {
+        //   fetchSportName(reservation.codeUIR);
+        // }
         if (reservation.codeUIR && !studentNames[reservation.studentId]) {
           fetchStudentName(reservation.codeUIR);
         }
       });
-      console.log('list of reservations : ' , response.data);
+      // console.log('list of reservations : ' , response.data);
       
 
     } catch (error) {

@@ -30,6 +30,31 @@ const LoginSignUp = ({ onLogin }) => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+//   const handleLogin = async () => {
+//     setError('');
+//     if (!email || !password) {
+//       setError("Please fill in all required fields.");
+//       return; // Stop execution if fields are empty
+//     }
+//     try {
+//       const result = await ApiManager.post('https://localhost:7253/api/Account/login', {
+//         email: email,
+//         password: password,
+//       });
+
+//       const { token, userId, username, roles } = result.data;
+//       localStorage.setItem("token", token);
+//       localStorage.setItem("userId", userId);
+//       localStorage.setItem("username", username);
+//       localStorage.setItem("roles", JSON.stringify(roles)); // Save roles to localStorage
+
+//       onLogin(); // Update isLoggedIn state in parent
+//       navigate('/'); // Redirect to home page after login
+//     } catch (error) {
+//       setError('Error: Unable to log in. Please try again.');
+//     }
+// };
+
  
   const handleLogin = async () => {
     setError('');
@@ -44,14 +69,17 @@ const LoginSignUp = ({ onLogin }) => {
         password: password,
       });
 
-      const { token, userId, username } = result.data;
+      const { token, userId, username , roles } = result.data;
       // Store the token in localStorage for access across components
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
       const theUserNAME = result.data.userName;
       localStorage.setItem("username", theUserNAME); 
+      localStorage.setItem("roles", JSON.stringify(roles));
 
-      console.log("data : for login",result.data.userName);
+      console.log("data : for login user name is : ",result.data.userName);
+      var Role =result.data.roles[0];
+      console.log("the roles is :: ",Role);
       
 
       // Call onLogin to update isLoggedIn in App

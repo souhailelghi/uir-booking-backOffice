@@ -10,10 +10,11 @@ import Pagination from "../../components/TableComponent/Pagination";
 import Filtrage from "../../components/TableComponent/Filtrage";
 
 const SportList = () => {
+  const [role, setRole] = useState('');
   const [listData, setListData] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [requestsPerPage] = useState(6);
+  const [requestsPerPage] = useState(4);
   const [expandedCard, setExpandedCard] = useState(null);
   const navigate = useNavigate();
 
@@ -46,6 +47,8 @@ const SportList = () => {
 
   useEffect(() => {
     fetchSports();
+    const storedRole = JSON.parse(localStorage.getItem("roles"))[0]; // Get the first role
+    setRole(storedRole);
   }, [selectedSport]);
 
   const handleDelete = async (sportId) => {
@@ -99,13 +102,16 @@ const SportList = () => {
         onSportSelect={handleSportSelect}
       />
       <div className="flex justify-between items-center mb-6">
-        <h4 className="text-xl font-semibold">Sports</h4>
+        <h4 className="text-xl font-semibold">Les Terrains</h4>
+          {/* Only show the "Ajouter Categorys" button if the role is SuperAdmin */}
+          {role === 'SuperAdmin' && (
         <button
           onClick={() => navigate("/add-sport")}
           className="px-4 py-2 bg-blue-950 text-white rounded-md"
         >
-          Ajouter Sport
+          Ajouter Terrain
         </button>
+         )}
       </div>
 
       <div className="overflow-x-auto">
@@ -113,7 +119,7 @@ const SportList = () => {
           <table className="w-full text-left border-collapse">
             <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
               <tr>
-                <th className="p-2.5 xl:p-5">Nom de la sport</th>
+                <th className="p-2.5 xl:p-5">Nom de Terrain</th>
                 <th className="p-2.5 xl:p-5 text-center">Day Off</th>
                 <th className="p-2.5 xl:p-5 text-center">description</th>
                 <th className="p-2.5 xl:p-5 text-center">conditions</th>
@@ -166,7 +172,11 @@ const SportList = () => {
                       className="w-24 h-24 object-cover rounded-md mx-auto mb-2"
                     />
                   </td>
+                      
                   <td className="p-2.5 xl:p-5 flex justify-center gap-3 text-2xl">
+                        {/* Only show Edit and Delete buttons if the role is SuperAdmin */}
+              {role === 'SuperAdmin' && (
+              <>
                     <Link to={`/update-sport/${sport.id}`} state={{
                 conditionss:sport.conditions,
                  names: sport.name ,
@@ -177,15 +187,22 @@ const SportList = () => {
                   images: sport.image}  }>
                       <FaRegEdit className="text-graydark cursor-pointer" />
                     </Link>
+              
                     <RiDeleteBin5Line
                       className="text-red-600 cursor-pointer"
                       onClick={() => handleDelete(sport.id)}
                     />
+                    </>
+                  )}
+                 
                     <RiTimeLine
                       className="text-red-500 cursor-pointer"
                       onClick={() => handleFetchClick(sport.id)}
                     />
+                   
+                 
                   </td>
+                 
                 </tr>
               ))}
             </tbody>

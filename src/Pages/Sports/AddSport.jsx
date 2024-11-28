@@ -89,14 +89,14 @@ const AddSport = () => {
       <div className="flex flex-col gap-9">
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <h3 className="font-medium text-black dark:text-white">Créer Sport</h3>
+            <h3 className="font-medium text-black dark:text-white">Créer Terrain</h3>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Catégorie sportive <span className="text-meta-1">*</span>
+                    Sport<span className="text-meta-1">*</span>
                   </label>
                   <select
                     value={categorieId}
@@ -105,7 +105,7 @@ const AddSport = () => {
                     required
                   >
                     <option value="" disabled>
-                      Sélectionnez une catégorie sportive
+                      Sélectionnez une Sport
                     </option>
                     {sportCategories.map((category) => (
                       <option key={category.id} value={category.id}>
@@ -120,7 +120,7 @@ const AddSport = () => {
              
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Référence" required onChange={(e) => setReferenceSport(e.target.value)} /> <br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Nombre de joueurs" required onChange={(e) => setNbPlayer(e.target.value)} /><br /><br />
-                <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Jours de repos" required onChange={(e) => setDaysoff(e.target.value)} /> <br /><br />
+                <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Jours de repos (le délai d’attente avant de pouvoir effectuer une nouvelle réservation.)" required onChange={(e) => setDaysoff(e.target.value)} /> <br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Conditions" required onChange={(e) => setConditions(e.target.value)} /><br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Nom" required onChange={(e) => setName(e.target.value)} /><br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Description" required onChange={(e) => setDescription(e.target.value)} /> <br />

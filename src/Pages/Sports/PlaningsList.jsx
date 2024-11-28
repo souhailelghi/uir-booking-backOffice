@@ -8,6 +8,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
 function PlaningsList() {
+  const [role, setRole] = useState('');
   const [VariantExams, setVariantExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const sportId = new URLSearchParams(useLocation().search).get("id");
@@ -53,6 +54,8 @@ function PlaningsList() {
 
   useEffect(() => {
     fetchVariantExams();
+    const storedRole = JSON.parse(localStorage.getItem("roles"))[0]; // Get the first role
+    setRole(storedRole);
   }, [sportId]);
 
   const handleFetchClick = () => {
@@ -92,6 +95,8 @@ function PlaningsList() {
         <h4 className="text-xl font-semibold text-black dark:text-white font-satoshi">
          list Planings :
         </h4>
+          {/* Only show the "Ajouter Categorys" button if the role is SuperAdmin */}
+          {role === 'SuperAdmin' && (
         <button
           onClick={handleFetchClick} // Use sportId directly here
           className="px-4 py-2 bg-blue-950 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" 
@@ -99,6 +104,7 @@ function PlaningsList() {
         >
           Ajouter un planing
         </button>
+          )}
       </div>
 
       <div className="flex flex-col font-satoshi">
@@ -148,8 +154,10 @@ function PlaningsList() {
               )}
             </ul>
             </div>
-      
+             {/* Only show the "Ajouter Categorys" button if the role is SuperAdmin */}
+             {role === 'SuperAdmin' && (
             <div className="hidden items-center justify-center text-2xl p-2.5 sm:flex xl:p-5 gap-3">
+         
               <Link to={`/update-planning/${test.id}` } state={{sportIds:sportId}}>
                 <FaRegEdit className="text-graydark cursor-pointer" />
               </Link>
@@ -158,6 +166,7 @@ function PlaningsList() {
                 onClick={() => handleDelete(test.id)}
               />
             </div>
+            )}
           </div>
         ))}
       </div>

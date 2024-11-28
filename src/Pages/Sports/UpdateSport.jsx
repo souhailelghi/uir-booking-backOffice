@@ -103,7 +103,7 @@ const UpdateSport = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Modifier Sport
+              Modifier Terrain
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
@@ -161,7 +161,7 @@ const UpdateSport = () => {
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2 mb-4">
                   <label className="mb-2 block text-black dark:text-white">
-                    Jours de repos
+                    Jours de repos (le délai d’attente avant de pouvoir effectuer une nouvelle réservation.)
                   </label>
                   <input
                     type="number"
