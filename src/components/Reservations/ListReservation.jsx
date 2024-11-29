@@ -6,6 +6,9 @@ import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Filtrage from "../TableComponent/Filtrage"
 import Pagination from "../TableComponent/Pagination"
+import jsPDF from 'jspdf';
+import image from '../../assets/uir.png'
+
 
 function ListReservation() {
   const [reservations, setReservations] = useState([]);
@@ -19,7 +22,16 @@ function ListReservation() {
 // Pagination 
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(3);
+  const [selectedReservations, setSelectedReservations] = useState([]);
 
+  const handleCheckboxToggle = (reservationId) => {
+    setSelectedReservations((prev) =>
+      prev.includes(reservationId)
+        ? prev.filter((id) => id !== reservationId)
+        : [...prev, reservationId]
+    );
+  };
+  
 
   useEffect(() => {
     fetchReservation();
@@ -42,14 +54,12 @@ function ListReservation() {
         if (reservation.sportId && !sportNames[reservation.sportId]) {
           fetchSportName(reservation.sportId);
         }
-        // if (reservation.codeUIR && !sportNames[reservation.codeUIR]) {
-        //   fetchSportName(reservation.codeUIR);
-        // }
+     
         if (reservation.codeUIR && !studentNames[reservation.studentId]) {
           fetchStudentName(reservation.codeUIR);
         }
       });
-      // console.log('list of reservations : ' , response.data);
+   
       
 
     } catch (error) {
@@ -112,6 +122,171 @@ function ListReservation() {
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
   const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+
+
+
+  const handleExportPDF = async () => {
+    if (selectedReservations.length === 0) {
+      toast.error("Please select at least one reservation to export.");
+      return;
+    }
+  
+    try {
+      const pdf = new jsPDF();
+  
+      selectedReservations.forEach((id, index) => {
+        const reservation = reservations.find((res) => res.id === id);
+  
+        if (reservation) {
+          // Add content to the page
+          pdf.setFontSize(16);
+          pdf.text(`Reservation Details`, 10, 10);
+  
+          // Get current date to show at the top right of the page
+          const currentDate = new Date().toLocaleDateString();
+  
+          // Calculate the position of the date at the far right
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          pdf.setFontSize(12);
+          pdf.text(currentDate, pageWidth - 10, 10, { align: 'right' });
+  
+          pdf.setFontSize(12);
+          pdf.text(`Reservation #${index + 1}`, 10, 20);
+          pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
+          pdf.text(`full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
+          // pdf.text(`Last Name: `, 10, 50);
+          pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
+          pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
+          pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
+  
+          if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
+            pdf.text(`List of Codes:`, 10, 90);
+  
+            reservation.codeUIRList.forEach((code, codeIndex) => {
+              const yPosition = 100 + codeIndex * 10; // Adjust y-position for each code
+              pdf.rect(10, yPosition - 5, 5, 5); // Draw checkbox
+              pdf.text(code, 20, yPosition); // Add the code text
+            });
+          }
+  
+          // Add a new page for the next reservation if not the last one
+          if (index < selectedReservations.length - 1) {
+            pdf.addPage();
+          }
+        }
+      });
+  
+      // Save the PDF
+      pdf.save("Reservations.pdf");
+      toast.success("PDF exported successfully!");
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast.error("Failed to export PDF.");
+    }
+  };
+  
+
+  // const handleExportPDF = async () => {
+  //   if (selectedReservations.length === 0) {
+  //     toast.error("Please select at least one reservation to export.");
+  //     return;
+  //   }
+  
+  //   try {
+  //     const pdf = new jsPDF();
+  
+  //     selectedReservations.forEach((id, index) => {
+  //       const reservation = reservations.find((res) => res.id === id);
+  
+  //       if (reservation) {
+  //         // Add content to the page
+  //         pdf.setFontSize(16);
+  //         pdf.text(`Reservation Details`, 10, 10);
+  
+  //         pdf.setFontSize(12);
+  //         pdf.text(`Reservation #${index + 1}`, 10, 20);
+  //         pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
+  //         pdf.text(`First Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."}`, 10, 40);
+  //         pdf.text(`Last Name: ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 50);
+  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 60);
+  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 70);
+  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 80);
+  
+  //         if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
+  //           pdf.text(`List of Codes:`, 10, 90);
+  
+  //           reservation.codeUIRList.forEach((code, codeIndex) => {
+  //             const yPosition = 100 + codeIndex * 10; // Adjust y-position for each code
+  //             pdf.rect(10, yPosition - 5, 5, 5); // Draw checkbox
+  //             pdf.text(code, 20, yPosition); // Add the code text
+  //           });
+  //         }
+  
+  //         // Add a new page for the next reservation if not the last one
+  //         if (index < selectedReservations.length - 1) {
+  //           pdf.addPage();
+  //         }
+  //       }
+  //     });
+  
+  //     // Save the PDF
+  //     pdf.save("Reservations.pdf");
+  //     toast.success("PDF exported successfully!");
+  //   } catch (error) {
+  //     console.error("Error exporting PDF:", error);
+  //     toast.error("Failed to export PDF.");
+  //   }
+  // };
+  
+  //todo : 
+
+  // const handleExportPDF = async () => {
+  //   if (selectedReservations.length === 0) {
+  //     toast.error("Please select at least one reservation to export.");
+  //     return;
+  //   }
+  
+  //   try {
+  //     const pdf = new jsPDF();
+  
+  //     selectedReservations.forEach((id, index) => {
+  //       const reservation = reservations.find((res) => res.id === id);
+  
+  //       if (reservation) {
+  //         // Add content to the page
+  //         pdf.setFontSize(16);
+  //         pdf.text(`Reservation Details`, 10, 10);
+  
+  //         pdf.setFontSize(12);
+  //         pdf.text(`Reservation #${index + 1}`, 10, 20);
+  //         pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
+  //         pdf.text(`First Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."}`, 10, 40);
+  //         pdf.text(`Last Name: ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 50);
+  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 60);
+  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 70);
+  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 80);
+  
+  //         if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
+  //           pdf.text(`List of Codes: ${reservation.codeUIRList.join(", ")}`, 10, 90);
+  //         }
+  
+  //         // Add a new page for the next reservation if not the last one
+  //         if (index < selectedReservations.length - 1) {
+  //           pdf.addPage();
+  //         }
+  //       }
+  //     });
+  
+  //     // Save the PDF
+  //     pdf.save("Reservations.pdf");
+  //     toast.success("PDF exported successfully!");
+  //   } catch (error) {
+  //     console.error("Error exporting PDF:", error);
+  //     toast.error("Failed to export PDF.");
+  //   }
+  // };
+  
+  
   return (
     <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
   <Filtrage
@@ -125,6 +300,13 @@ function ListReservation() {
       List des Reservations
     </h4>
   </div>
+  <button
+  onClick={handleExportPDF}
+  className="px-4 py-2 bg-blue-950 text-white rounded-md"
+>
+  Export PDF
+</button>
+
 
   <div className="font-satoshi">
     <table className="w-full table-auto border-collapse border border-stroke dark:border-strokedark">
@@ -140,14 +322,23 @@ function ListReservation() {
           <th className="p-2.5 xl:p-5 text-center">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody> 
+        
         {currentRequests.map((reservation, key) => (
+          
           <tr
             className={`${
               key === currentRequests.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"
             }`}
             key={reservation.id}
           >
+              <input
+  type="checkbox"
+  checked={selectedReservations.includes(reservation.id)}
+  onChange={() => handleCheckboxToggle(reservation.id)}
+  className="form-checkbox"
+/>
+
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
               {reservation.codeUIR || "Loading..."}
             </td>
