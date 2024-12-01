@@ -23,6 +23,7 @@ function ListReservation() {
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(3);
   const [selectedReservations, setSelectedReservations] = useState([]);
+  const [codeUIR, setCodeUir] = useState("");
 
   const handleCheckboxToggle = (reservationId) => {
     setSelectedReservations((prev) =>
@@ -87,7 +88,7 @@ function ListReservation() {
 
 
     
-
+      setCodeUir(codeUIR)
       setstudentFirstNames((prevStudentNames) => ({
         ...prevStudentNames,
         [codeUIR]: response.data.firstName,
@@ -299,19 +300,21 @@ function ListReservation() {
     <h4 className="text-xl font-semibold text-black dark:text-white font-satoshi">
       List des Reservations
     </h4>
-  </div>
-  <button
+    <button
   onClick={handleExportPDF}
   className="px-4 py-2 bg-blue-950 text-white rounded-md"
 >
   Export PDF
 </button>
+  </div>
+
 
 
   <div className="font-satoshi">
     <table className="w-full table-auto border-collapse border border-stroke dark:border-strokedark">
       <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
         <tr>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">check reservation</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Student Code</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">First Name</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Last Name</th>
@@ -332,12 +335,15 @@ function ListReservation() {
             }`}
             key={reservation.id}
           >
-              <input
+          
+<td className="p-2.5 xl:p-5 text-black dark:text-white">
+<input
   type="checkbox"
   checked={selectedReservations.includes(reservation.id)}
   onChange={() => handleCheckboxToggle(reservation.id)}
   className="form-checkbox"
 />
+            </td>
 
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
               {reservation.codeUIR || "Loading..."}
@@ -362,7 +368,7 @@ function ListReservation() {
             </td>
             <td className="p-2.5 xl:p-5 flex justify-center gap-3 text-2xl">
                 
-                  <Link  to={`/checklist/${reservation.id}`}    >
+                  <Link  to={`/checklist/${reservation.id}`} codeUIR={codeUIR}   >
                       <FaRegListAlt className="text-graydark cursor-pointer" />
                     </Link>
                   

@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ApiManager from "../../api";
@@ -12,18 +9,13 @@ const Checklist = () => {
   const [reservation, setReservation] = useState(null);
   const [sportNames, setSportNames] = useState({});
   const [checkedBoxes, setCheckedBoxes] = useState({});
-  const [playerDetails, setPlayerDetails] = useState({}); // Store fetched student details
   const navigate = useNavigate();
-  const [codeUIR, setCodeUir] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
     const fetchReservation = async () => {
       try {
         const response = await ApiManager.get(`/Reservations/${id}`);
         setReservation(response.data);
-        setCodeUir(response.data.codeUIR)
 
         // Initialize the checkbox states
         const initialCheckedState = {};
@@ -32,6 +24,7 @@ const Checklist = () => {
             initialCheckedState[index] = false;
           });
         }
+        // Include the individual `codeUIR` checkbox state
         if (response.data.codeUIR) {
           initialCheckedState["singleCode"] = false;
         }
@@ -39,11 +32,6 @@ const Checklist = () => {
 
         if (response.data.sportId && !sportNames[response.data.sportId]) {
           fetchSportName(response.data.sportId);
-        }
-
-        // Fetch player details
-        if (response.data.codeUIRList && response.data.codeUIRList.length > 0) {
-          await fetchPlayerDetails(response.data.codeUIRList);
         }
       } catch (error) {
         console.error("Error fetching reservation checklist:", error);
@@ -56,23 +44,6 @@ const Checklist = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    const fetchStudentFullName = async (codeUIR) => {
-      try {
-        const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`)  
-        console.log( response.data.lastName,response.data.firstName);
-        setFirstName(response.data.firstName)
-        setLastName(response.data.lastName)
-  
-      } catch (error) {
-        console.error("Error fetching student :", error);
-      }
-    };
-    if (codeUIR) {
-      fetchStudentFullName(codeUIR);
-    }
-  }, [codeUIR]);
-
   const fetchSportName = async (sportId) => {
     try {
       const response = await ApiManager.get(`/Sports/${sportId}`);
@@ -82,21 +53,6 @@ const Checklist = () => {
       }));
     } catch (error) {
       console.error("Error fetching sport name:", error);
-    }
-  };
-  
-
-  const fetchPlayerDetails = async (codeUIRList) => {
-    try {
-      const details = {};
-      for (const codeUIR of codeUIRList) {
-        const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`);
-        details[codeUIR] = `${response.data.firstName} ${response.data.lastName}`;
-      }
-      setPlayerDetails(details);
-    } catch (error) {
-      console.error("Error fetching player details:", error);
-      toast.error("Failed to fetch player details.");
     }
   };
 
@@ -148,11 +104,10 @@ const Checklist = () => {
             {sportNames[reservation.sportId] || "Loading..."}
           </span>
         </div>
-
         <div>
           <h3 className="font-semibold text-gray-600 mb-2">List of Players:</h3>
           <div className="space-y-2">
-          {reservation.codeUIR && (
+            {reservation.codeUIR && (
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -160,10 +115,10 @@ const Checklist = () => {
                   onChange={() => handleCheckboxChange("singleCode")}
                   className="form-checkbox"
                 />
-                <label className="text-gray-800">{lastName} {firstName} - {reservation.codeUIR}</label>
+                <label className="text-gray-800">{reservation.codeUIR}</label>
               </div>
             )}
-            
+
             {reservation.codeUIRList && reservation.codeUIRList.length > 0
               ? reservation.codeUIRList.map((code, index) => (
                   <div key={index} className="flex items-center space-x-2">
@@ -173,9 +128,7 @@ const Checklist = () => {
                       onChange={() => handleCheckboxChange(index)}
                       className="form-checkbox"
                     />
-                    <label className="text-gray-800">
-                      {playerDetails[code] || code} - {code}
-                    </label>
+                    <label className="text-gray-800">{code}</label>
                   </div>
                 ))
               : "No players listed."}
@@ -198,3 +151,5 @@ const Checklist = () => {
 };
 
 export default Checklist;
+
+
