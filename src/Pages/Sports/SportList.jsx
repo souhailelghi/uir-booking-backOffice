@@ -127,7 +127,7 @@ const SportList = () => {
             <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
               <tr>
                 <th className="p-2.5 xl:p-5">Nom de Terrain</th>
-                <th className="p-2.5 xl:p-5 text-center">Day Off</th>
+                <th className="p-2.5 xl:p-5 text-center">Jour de repos</th>
                 <th className="p-2.5 xl:p-5 text-center">description</th>
                 <th className="p-2.5 xl:p-5 text-center">conditions</th>
                 <th className="p-2.5 xl:p-5 text-center">Capacité</th>

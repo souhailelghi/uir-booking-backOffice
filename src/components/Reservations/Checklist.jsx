@@ -128,18 +128,18 @@ const Checklist = () => {
           OK
         </button>
       </div>
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Checklist</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-4">liste de contrôle</h2>
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <span className="font-semibold text-gray-600">Date:</span>
           <span className="text-gray-800">{reservation.onlyDate}</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="font-semibold text-gray-600">Time Start:</span>
+          <span className="font-semibold text-gray-600">Heure de début :</span>
           <span className="text-gray-800">{reservation.hourStart}</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="font-semibold text-gray-600">Time End:</span>
+          <span className="font-semibold text-gray-600">Heure de fin :</span>
           <span className="text-gray-800">{reservation.hourEnd}</span>
         </div>
         <div className="flex justify-between items-center">
@@ -150,7 +150,7 @@ const Checklist = () => {
         </div>
 
         <div>
-          <h3 className="font-semibold text-gray-600 mb-2">List of Players:</h3>
+          <h3 className="font-semibold text-gray-600 mb-2">Liste des joueurs :</h3>
           <div className="space-y-2">
           {reservation.codeUIR && (
               <div className="flex items-center space-x-2">
@@ -182,11 +182,11 @@ const Checklist = () => {
             <div className="flex items-center space-x-2 mt-4">
               {allChecked ? (
                 <span className="text-green-600 font-semibold">
-                  ✅ All players checked
+                  ✅ Tous les joueurs vérifiés
                 </span>
               ) : (
                 <span className="text-red-600 font-semibold">
-                  ❌ {checkedCount}/{totalCheckboxes} players checked
+                  ❌ {checkedCount}/{totalCheckboxes} Joueurs vérifiés
                 </span>
               )}
             </div>

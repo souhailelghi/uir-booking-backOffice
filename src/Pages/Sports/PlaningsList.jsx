@@ -110,16 +110,16 @@ function PlaningsList() {
       <div className="flex flex-col font-satoshi">
         <div className="grid grid-cols-3 rounded-sm bg-blue-100 dark:bg-meta-4 text-graydark sm:grid-cols-5">
           <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Day</h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Jours</h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-            Date Created
+            date de création
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-            Time Ranges
+            plages horaires
             </h5>
           </div>
         </div>
@@ -148,7 +148,18 @@ function PlaningsList() {
               ) : (
                   test.timeRanges.map(range => (
                       <li key={range.id}>
-                          {range.hourStart} - {range.hourEnd}
+                          {/* {range.hourStart} - {range.hourEnd} */}
+                          <label className="blue-txt">
+                  {new Date(`1970-01-01T${range.hourStart}Z`).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+                  -{" "}
+                  {new Date(`1970-01-01T${range.hourEnd}Z`).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </label>
                       </li>
                   ))
               )}

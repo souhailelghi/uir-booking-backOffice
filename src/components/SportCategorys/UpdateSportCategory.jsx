@@ -37,56 +37,6 @@ const UpdateSportCategory = () => {
     fetchSportCategoryById();
   }, [id]);
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   if (!lastName) {
-  //     Swal.fire({
-  //       title: "Assurez-vous de remplir tout!",
-  //       icon: "error",
-  //     });
-  //     return;
-  //   }
-
-  //   const formData = {
-  //     id: id,
-  //     name: lastName,
-  //     imageUpload: image,
-  //     description:"",
-  //     dateCreation:"",
-  //     dateModification:""
-  //   };
-
-  //   try {
-  //     const response = await ApiManager.put(
-  //       `/SportCategorys/update`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       Swal.fire({
-  //         title: "Sport Category mis à jour avec succès!",
-  //         icon: "success",
-  //       });
-  //       navigate("/SportCategorys");
-  //     } else {
-  //       Swal.fire({
-  //         title: "Erreur lors de la mise à jour du Sport Category!",
-  //         icon: "error",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       title: "Erreur réseau!",
-  //       text: error.message,
-  //       icon: "error",
-  //     });
-  //   }
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -143,7 +93,7 @@ const UpdateSportCategory = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Modifier Sport Category
+              Modifier Sport 
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
@@ -151,7 +101,7 @@ const UpdateSportCategory = () => {
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
                 <div className="w-full sm:w-1/2">
                   <label className="mt-8 mb-2.5 block text-black dark:text-white">
-                    Sport Category name<span className="text-meta-1">*</span>
+                  Nom du sport<span className="text-meta-1">*</span>
                   </label>
                   <input
                     type="text"
@@ -165,7 +115,7 @@ const UpdateSportCategory = () => {
 
                 <div className="w-full sm:w-1/2">
                   <label className="mt-8 mb-2.5 block text-black dark:text-white">
-                    Sport Category Image<span className="text-meta-1">*</span>
+                  Image du sport<span className="text-meta-1">*</span>
                   </label>
 
                   <input

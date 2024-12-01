@@ -178,14 +178,14 @@ function ListReservation() {
 
           pdf.setFontSize(12);
           pdf.text(`Reservation #${index + 1}`, 10, 20);
-          pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
-          pdf.text(`Full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
-          pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
-          pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
+          pdf.text(`Code étudiant : ${reservation.codeUIR}`, 10, 30);
+          pdf.text(`nom complet : ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
+          pdf.text(`Sport : ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
+          pdf.text(`heure : ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
           pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
 
           if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
-            pdf.text(`List of Students:`, 10, 90);
+            pdf.text(`liste des étudiants:`, 10, 90);
 
             // Fetch and display the full names for each codeUIR
             reservation.codeUIRList.forEach((code, codeIndex) => {
@@ -246,15 +246,15 @@ function ListReservation() {
     <table className="w-full table-auto border-collapse border border-stroke dark:border-strokedark">
       <thead className="bg-blue-100 dark:bg-meta-4 text-graydark">
         <tr>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">check reservation</th>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Student Code</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Sélectionnez </th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Code étudiant</th>
       
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Full Name</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">nom complet</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Sport</th>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Time</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">heure</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">Date</th>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">List Student</th>
-          <th className="p-2.5 xl:p-5 text-center">Check List</th>
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">liste des étudiants</th>
+          <th className="p-2.5 xl:p-5 text-center">liste de contrôle</th>
         </tr>
       </thead>
       <tbody> 
@@ -288,7 +288,18 @@ function ListReservation() {
               {sportNames[reservation.sportId] || "Loading..."}
             </td>
             <td className="p-2.5 xl:p-5 text-center text-black">
-              {reservation.hourStart} - {reservation.hourEnd}
+              {/* {reservation.hourStart} - {reservation.hourEnd} */}
+              <label className="blue-txt">
+                  {new Date(`1970-01-01T${reservation.hourStart}Z`).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+                  -{" "}
+                  {new Date(`1970-01-01T${reservation.hourEnd}Z`).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </label>
             </td>
             <td className="p-2.5 xl:p-5 text-center hidden sm:table-cell text-black dark:text-white">
               {reservation.onlyDate}
