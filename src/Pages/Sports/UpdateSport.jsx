@@ -176,14 +176,16 @@ const UpdateSport = () => {
                   <label className="mb-2 block text-black dark:text-white">
                     Conditions
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Conditions"
-                    value={conditions}
-                    required
-                    onChange={(e) => setConditions(e.target.value)}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
-                  />
+                  <textarea
+      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
+      id="conditions"
+      rows="4"
+      value={conditions}
+      placeholder=""
+      required
+      onChange={(e) => setConditions(e.target.value)}
+    ></textarea>
+                
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-6 mb-4.5">
@@ -204,14 +206,19 @@ const UpdateSport = () => {
                   <label className="mb-2 block text-black dark:text-white">
                     Description
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Description"
-                    value={description}
-                    required
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
-                  />
+
+
+              
+
+<textarea
+      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none"
+      id="description"
+      rows="4"
+      placeholder=""
+      value={description}
+      required
+      onChange={(e) => setDescription(e.target.value)}
+    ></textarea>
                 </div>
               </div>
 

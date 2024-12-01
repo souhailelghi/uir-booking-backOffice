@@ -37,17 +37,7 @@ const AddSport = () => {
       return;
     }
 
-    // Prepare the form data for multipart/form-data submission
-    // const formData = new FormData();
-    // formData.append("CategorieId", categorieId);
-    // formData.append("ReferenceSport", referenceSport);
-    // formData.append("NbPlayer", nbPlayer);
-    // formData.append("Daysoff", daysoff);
-    // formData.append("Conditions", conditions);
-    // formData.append("Name", name);
-    // formData.append("Description", description);
-    // formData.append("ImageUpload", imageUpload); // Add the image file
-    
+
     const formData = {
       categorieId:categorieId,
       referenceSport:referenceSport,
@@ -118,12 +108,115 @@ const AddSport = () => {
 
               {/* Other fields */}
              
-                <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Référence" required onChange={(e) => setReferenceSport(e.target.value)} /> <br /><br />
+                {/* <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Référence" required onChange={(e) => setReferenceSport(e.target.value)} /> <br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Nombre de joueurs" required onChange={(e) => setNbPlayer(e.target.value)} /><br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="number" placeholder="Jours de repos (le délai d’attente avant de pouvoir effectuer une nouvelle réservation.)" required onChange={(e) => setDaysoff(e.target.value)} /> <br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Conditions" required onChange={(e) => setConditions(e.target.value)} /><br /><br />
                 <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Nom" required onChange={(e) => setName(e.target.value)} /><br /><br />
-                <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Description" required onChange={(e) => setDescription(e.target.value)} /> <br />
+                <input className="w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter" type="text" placeholder="Description" required onChange={(e) => setDescription(e.target.value)} /> <br /> */}
+<div className="form-container">
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="referenceSport"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Référence
+    </label>
+    <input
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      type="number"
+      id="referenceSport"
+      placeholder=""
+      required
+      onChange={(e) => setReferenceSport(e.target.value)}
+    />
+  </div>
+
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="nbPlayer"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Nombre de joueurs
+    </label>
+    <input
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      type="number"
+      id="nbPlayer"
+      placeholder=""
+      required
+      onChange={(e) => setNbPlayer(e.target.value)}
+    />
+  </div>
+
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="daysoff"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Jours de repos (le délai d’attente avant de pouvoir effectuer une nouvelle réservation.)
+    </label>
+    <input
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      type="number"
+      id="daysoff"
+      placeholder=""
+      required
+      onChange={(e) => setDaysoff(e.target.value)}
+    />
+  </div>
+
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="conditions"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Conditions
+    </label>
+    <textarea
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      id="conditions"
+      rows="4"
+      placeholder=""
+      required
+      onChange={(e) => setConditions(e.target.value)}
+    ></textarea>
+  </div>
+
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="name"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Nom
+    </label>
+    <input
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      type="text"
+      id="name"
+      placeholder=""
+      required
+      onChange={(e) => setName(e.target.value)}
+    />
+  </div>
+
+  <div className="relative w-full mb-4">
+    <label
+      htmlFor="description"
+      className="block text-[#424242] text-[16px] mb-2 transition-all peer-placeholder-shown:text-[#9E9E9E] peer-focus:text-[#424242]"
+    >
+      Description
+    </label>
+    <textarea
+      className="peer w-full rounded-[4px] border-[1px] border-[#E0E0E0] text-[16px] bg-[#FFFFFF] py-3 px-5 text-[#424242] outline-none transition disabled:cursor-default disabled:bg-whiter"
+      id="description"
+      rows="4"
+      placeholder=""
+      required
+      onChange={(e) => setDescription(e.target.value)}
+    ></textarea>
+  </div>
+</div>
 
                 {/* Image upload */}
                   {/* Image upload */}
