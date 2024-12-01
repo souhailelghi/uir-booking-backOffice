@@ -24,6 +24,7 @@ function ListReservation() {
   const [requestsPerPage] = useState(3);
   const [selectedReservations, setSelectedReservations] = useState([]);
   const [codeUIR, setCodeUir] = useState("");
+  const [playerDetails, setPlayerDetails] = useState({}); 
 
   const handleCheckboxToggle = (reservationId) => {
     setSelectedReservations((prev) =>
@@ -38,6 +39,36 @@ function ListReservation() {
     fetchReservation();
   }, [selectedSport]);
 
+
+
+  // const fetchPlayerDetails = async (codeUIRList) => {
+  //   try {
+  //     const details = {};
+  //     for (const codeUIR of codeUIRList) {
+  //       const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`);
+  //       details[codeUIR] = `${response.data.firstName} ${response.data.lastName}`;
+  //     }
+  //     setPlayerDetails(details);
+  //   } catch (error) {
+  //     console.error("Error fetching player details:", error);
+  //     toast.error("Failed to fetch player details.");
+  //   }
+  // };
+
+  
+  const fetchPlayerDetails = async (codeUIRList) => {
+    try {
+      const details = {};
+      for (const codeUIR of codeUIRList) {
+        const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`);
+        details[codeUIR] = `${response.data.firstName} ${response.data.lastName}`;
+      }
+      setPlayerDetails(details);
+    } catch (error) {
+      console.error("Error fetching player details:", error);
+      toast.error("Failed to fetch player details.");
+    }
+  };
   const fetchReservation = async () => {
 
     //todo : --------------
@@ -126,67 +157,6 @@ function ListReservation() {
 
 
 
-  const handleExportPDF = async () => {
-    if (selectedReservations.length === 0) {
-      toast.error("Please select at least one reservation to export.");
-      return;
-    }
-  
-    try {
-      const pdf = new jsPDF();
-  
-      selectedReservations.forEach((id, index) => {
-        const reservation = reservations.find((res) => res.id === id);
-  
-        if (reservation) {
-          // Add content to the page
-          pdf.setFontSize(16);
-          pdf.text(`Reservation Details`, 10, 10);
-  
-          // Get current date to show at the top right of the page
-          const currentDate = new Date().toLocaleDateString();
-  
-          // Calculate the position of the date at the far right
-          const pageWidth = pdf.internal.pageSize.getWidth();
-          pdf.setFontSize(12);
-          pdf.text(currentDate, pageWidth - 10, 10, { align: 'right' });
-  
-          pdf.setFontSize(12);
-          pdf.text(`Reservation #${index + 1}`, 10, 20);
-          pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
-          pdf.text(`full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
-          // pdf.text(`Last Name: `, 10, 50);
-          pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
-          pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
-          pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
-  
-          if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
-            pdf.text(`List of Codes:`, 10, 90);
-  
-            reservation.codeUIRList.forEach((code, codeIndex) => {
-              const yPosition = 100 + codeIndex * 10; // Adjust y-position for each code
-              pdf.rect(10, yPosition - 5, 5, 5); // Draw checkbox
-              pdf.text(code, 20, yPosition); // Add the code text
-            });
-          }
-  
-          // Add a new page for the next reservation if not the last one
-          if (index < selectedReservations.length - 1) {
-            pdf.addPage();
-          }
-        }
-      });
-  
-      // Save the PDF
-      pdf.save("Reservations.pdf");
-      toast.success("PDF exported successfully!");
-    } catch (error) {
-      console.error("Error exporting PDF:", error);
-      toast.error("Failed to export PDF.");
-    }
-  };
-  
-
   // const handleExportPDF = async () => {
   //   if (selectedReservations.length === 0) {
   //     toast.error("Please select at least one reservation to export.");
@@ -204,14 +174,22 @@ function ListReservation() {
   //         pdf.setFontSize(16);
   //         pdf.text(`Reservation Details`, 10, 10);
   
+  //         // Get current date to show at the top right of the page
+  //         const currentDate = new Date().toLocaleDateString();
+  
+  //         // Calculate the position of the date at the far right
+  //         const pageWidth = pdf.internal.pageSize.getWidth();
+  //         pdf.setFontSize(12);
+  //         pdf.text(currentDate, pageWidth - 10, 10, { align: 'right' });
+  
   //         pdf.setFontSize(12);
   //         pdf.text(`Reservation #${index + 1}`, 10, 20);
   //         pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
-  //         pdf.text(`First Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."}`, 10, 40);
-  //         pdf.text(`Last Name: ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 50);
-  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 60);
-  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 70);
-  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 80);
+  //         pdf.text(`full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
+  //         // pdf.text(`Last Name: `, 10, 50);
+  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
+  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
+  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
   
   //         if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
   //           pdf.text(`List of Codes:`, 10, 90);
@@ -239,54 +217,72 @@ function ListReservation() {
   //   }
   // };
   
-  //todo : 
+  const handleExportPDF = async () => {
+    if (selectedReservations.length === 0) {
+      toast.error("Please select at least one reservation to export.");
+      return;
+    }
 
-  // const handleExportPDF = async () => {
-  //   if (selectedReservations.length === 0) {
-  //     toast.error("Please select at least one reservation to export.");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const pdf = new jsPDF();
-  
-  //     selectedReservations.forEach((id, index) => {
-  //       const reservation = reservations.find((res) => res.id === id);
-  
-  //       if (reservation) {
-  //         // Add content to the page
-  //         pdf.setFontSize(16);
-  //         pdf.text(`Reservation Details`, 10, 10);
-  
-  //         pdf.setFontSize(12);
-  //         pdf.text(`Reservation #${index + 1}`, 10, 20);
-  //         pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
-  //         pdf.text(`First Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."}`, 10, 40);
-  //         pdf.text(`Last Name: ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 50);
-  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 60);
-  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 70);
-  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 80);
-  
-  //         if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
-  //           pdf.text(`List of Codes: ${reservation.codeUIRList.join(", ")}`, 10, 90);
-  //         }
-  
-  //         // Add a new page for the next reservation if not the last one
-  //         if (index < selectedReservations.length - 1) {
-  //           pdf.addPage();
-  //         }
-  //       }
-  //     });
-  
-  //     // Save the PDF
-  //     pdf.save("Reservations.pdf");
-  //     toast.success("PDF exported successfully!");
-  //   } catch (error) {
-  //     console.error("Error exporting PDF:", error);
-  //     toast.error("Failed to export PDF.");
-  //   }
-  // };
-  
+    try {
+      const pdf = new jsPDF();
+
+      selectedReservations.forEach((id, index) => {
+        const reservation = reservations.find((res) => res.id === id);
+
+        if (reservation) {
+          // Add content to the page
+          pdf.setFontSize(16);
+          pdf.text(`Reservation Details`, 10, 10);
+
+          // Get current date to show at the top right of the page
+          const currentDate = new Date().toLocaleDateString();
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          pdf.setFontSize(12);
+          pdf.text(currentDate, pageWidth - 10, 10, { align: 'right' });
+
+          pdf.setFontSize(12);
+          pdf.text(`Reservation #${index + 1}`, 10, 20);
+          pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
+          pdf.text(`Full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
+          pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
+          pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
+          pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
+
+          if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
+            pdf.text(`List of Students:`, 10, 90);
+
+            // Fetch and display the full names for each codeUIR
+            reservation.codeUIRList.forEach((code, codeIndex) => {
+              const fullName = playerDetails[code] || "Loading..."; // Get full name from playerDetails
+              const yPosition = 100 + codeIndex * 10; // Adjust y-position for each student
+              pdf.rect(10, yPosition - 5, 5, 5); // Draw checkbox
+              pdf.text(`${code} - ${fullName}`, 20, yPosition); // Add code and full name
+            });
+          }
+
+          // Add a new page for the next reservation if not the last one
+          if (index < selectedReservations.length - 1) {
+            pdf.addPage();
+          }
+        }
+      });
+
+      // Save the PDF
+      pdf.save("Reservations.pdf");
+      toast.success("PDF exported successfully!");
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast.error("Failed to export PDF.");
+    }
+  };
+
+  useEffect(() => {
+    // Call fetchPlayerDetails to load full names for each student
+    const allCodeUIRs = reservations.flatMap(res => res.codeUIRList);
+    fetchPlayerDetails([...new Set(allCodeUIRs)]); // Fetch details for unique codes
+  }, [reservations]);
+
+ 
   
   return (
     <div className="rounded-sm border m-6 border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
