@@ -6,8 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import ApiManager from "../../api";
 import Swal from "sweetalert2";
-import Pagination from "../../components/TableComponent/Pagination";
+// import Pagination from "../../components/TableComponent/Pagination";
 import Filtrage from "../../components/TableComponent/Filtrage";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 const SportList = () => {
   const [role, setRole] = useState('');
@@ -78,15 +81,18 @@ const SportList = () => {
     navigate(`/planning-list?id=${id}`);
   };
 
-  //todo : Pagination
-  const indexOfLastRequest = currentPage * requestsPerPage;
-  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
-  const currentRequests = filteredRequests.slice(
-    indexOfFirstRequest,
-    indexOfLastRequest
-  );
-  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
-
+   //todo : Pagination logic
+   const indexOfLastRequest = currentPage * requestsPerPage;
+   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+   const currentRequests = filteredRequests.slice(
+     indexOfFirstRequest,
+     indexOfLastRequest
+   );
+   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+ 
+   const handlePageChange = (event, value) => {
+     setCurrentPage(value);
+   };
   const handleSportSelect = (sportId) => {
     setSelectedSport(sportId);
     console.log("sportId : from sport list ", sportId);
@@ -101,6 +107,7 @@ const SportList = () => {
         sportNames={sportNames}
         onSportSelect={handleSportSelect}
       />
+      
       <div className="flex justify-between items-center mb-6">
         <h4 className="text-xl font-semibold">Les Terrains</h4>
           {/* Only show the "Ajouter Categorys" button if the role is SuperAdmin */}
@@ -213,11 +220,16 @@ const SportList = () => {
       </div>
 
       <ToastContainer />
+      <Stack spacing={2} className="mt-6">
       <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+        />
+   
+    </Stack>
+   
     </div>
   );
 };

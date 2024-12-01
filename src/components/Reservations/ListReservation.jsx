@@ -5,9 +5,11 @@ import { FaRegListAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Filtrage from "../TableComponent/Filtrage"
-import Pagination from "../TableComponent/Pagination"
+// import Pagination from "../TableComponent/Pagination"
 import jsPDF from 'jspdf';
 import image from '../../assets/uir.png'
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 
 function ListReservation() {
@@ -41,19 +43,7 @@ function ListReservation() {
 
 
 
-  // const fetchPlayerDetails = async (codeUIRList) => {
-  //   try {
-  //     const details = {};
-  //     for (const codeUIR of codeUIRList) {
-  //       const response = await ApiManager.get(`/Students/GetStudentByCodeUIR/${codeUIR}`);
-  //       details[codeUIR] = `${response.data.firstName} ${response.data.lastName}`;
-  //     }
-  //     setPlayerDetails(details);
-  //   } catch (error) {
-  //     console.error("Error fetching player details:", error);
-  //     toast.error("Failed to fetch player details.");
-  //   }
-  // };
+
 
   
   const fetchPlayerDetails = async (codeUIRList) => {
@@ -149,74 +139,20 @@ function ListReservation() {
     setSelectedSport(sportId);
   };
 
-  //todo : Pagination 
-  const indexOfLastRequest = currentPage * requestsPerPage;
-  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
-  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
-  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+   //todo : Pagination logic
+   const indexOfLastRequest = currentPage * requestsPerPage;
+   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+   const currentRequests = filteredRequests.slice(
+     indexOfFirstRequest,
+     indexOfLastRequest
+   );
+   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+ 
+   const handlePageChange = (event, value) => {
+     setCurrentPage(value);
+   };
 
-
-
-  // const handleExportPDF = async () => {
-  //   if (selectedReservations.length === 0) {
-  //     toast.error("Please select at least one reservation to export.");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const pdf = new jsPDF();
-  
-  //     selectedReservations.forEach((id, index) => {
-  //       const reservation = reservations.find((res) => res.id === id);
-  
-  //       if (reservation) {
-  //         // Add content to the page
-  //         pdf.setFontSize(16);
-  //         pdf.text(`Reservation Details`, 10, 10);
-  
-  //         // Get current date to show at the top right of the page
-  //         const currentDate = new Date().toLocaleDateString();
-  
-  //         // Calculate the position of the date at the far right
-  //         const pageWidth = pdf.internal.pageSize.getWidth();
-  //         pdf.setFontSize(12);
-  //         pdf.text(currentDate, pageWidth - 10, 10, { align: 'right' });
-  
-  //         pdf.setFontSize(12);
-  //         pdf.text(`Reservation #${index + 1}`, 10, 20);
-  //         pdf.text(`Student Code: ${reservation.codeUIR}`, 10, 30);
-  //         pdf.text(`full Name: ${studentFirstNames[reservation.codeUIR] || "Loading..."} - ${studentLastName[reservation.codeUIR] || "Loading..."}`, 10, 40);
-  //         // pdf.text(`Last Name: `, 10, 50);
-  //         pdf.text(`Sport: ${sportNames[reservation.sportId] || "Loading..."}`, 10, 50);
-  //         pdf.text(`Time: ${reservation.hourStart} - ${reservation.hourEnd}`, 10, 60);
-  //         pdf.text(`Date: ${reservation.onlyDate || "Unknown"}`, 10, 70);
-  
-  //         if (reservation.codeUIRList && reservation.codeUIRList.length > 0) {
-  //           pdf.text(`List of Codes:`, 10, 90);
-  
-  //           reservation.codeUIRList.forEach((code, codeIndex) => {
-  //             const yPosition = 100 + codeIndex * 10; // Adjust y-position for each code
-  //             pdf.rect(10, yPosition - 5, 5, 5); // Draw checkbox
-  //             pdf.text(code, 20, yPosition); // Add the code text
-  //           });
-  //         }
-  
-  //         // Add a new page for the next reservation if not the last one
-  //         if (index < selectedReservations.length - 1) {
-  //           pdf.addPage();
-  //         }
-  //       }
-  //     });
-  
-  //     // Save the PDF
-  //     pdf.save("Reservations.pdf");
-  //     toast.success("PDF exported successfully!");
-  //   } catch (error) {
-  //     console.error("Error exporting PDF:", error);
-  //     toast.error("Failed to export PDF.");
-  //   }
-  // };
-  
+ 
   const handleExportPDF = async () => {
     if (selectedReservations.length === 0) {
       toast.error("Please select at least one reservation to export.");
@@ -312,13 +248,13 @@ function ListReservation() {
         <tr>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">check reservation</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Student Code</th>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">First Name</th>
-          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Last Name</th>
+      
+          <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">Full Name</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Sport</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center">Time</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">Date</th>
           <th className="p-2.5 xl:p-5 text-sm font-medium uppercase text-center hidden sm:table-cell">List Student</th>
-          <th className="p-2.5 xl:p-5 text-center">Actions</th>
+          <th className="p-2.5 xl:p-5 text-center">Check List</th>
         </tr>
       </thead>
       <tbody> 
@@ -344,11 +280,9 @@ function ListReservation() {
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
               {reservation.codeUIR || "Loading..."}
             </td>
+           
             <td className="p-2.5 xl:p-5 text-black dark:text-white">
-              {studentFirstNames[reservation.codeUIR] || "Loading..."}
-            </td>
-            <td className="p-2.5 xl:p-5 text-black dark:text-white">
-              {studentLastName[reservation.codeUIR] || "Loading..."}
+            {studentFirstNames[reservation.codeUIR] || "Loading..."}  {studentLastName[reservation.codeUIR] || "Loading..."}
             </td>
             <td className="p-2.5 xl:p-5 text-center text-black dark:text-white">
               {sportNames[reservation.sportId] || "Loading..."}
@@ -374,7 +308,16 @@ function ListReservation() {
       </tbody>
     </table>
   </div>
-  <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+  {/* <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} /> */}
+  <Stack spacing={2} className="mt-6">
+      <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+        />
+   
+    </Stack>
 </div>
 
   );
