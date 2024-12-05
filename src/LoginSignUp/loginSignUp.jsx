@@ -40,7 +40,7 @@ const LoginSignUp = ({ onLogin }) => {
       return; // Stop execution if fields are empty
     }
     try {
-      const result = await ApiManager.post('https://localhost:7253/api/Account/login', {
+      const result = await ApiManager.post('https://localhost:7109/api/Account/login', {
         email: email,
         password: password,
       });
