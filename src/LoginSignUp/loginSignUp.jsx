@@ -61,7 +61,7 @@ const LoginSignUp = ({ onLogin }) => {
       // Call onLogin to update isLoggedIn in App
       onLogin();
 
-      navigate('/'); // Redirect to the main page or desired route after login
+      navigate('/dashboard'); // Redirect to the main page or desired route after login
     } catch (error) {
       console.log("err req:", error.request);
       if (error.response) {

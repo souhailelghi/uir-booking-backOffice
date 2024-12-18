@@ -18,6 +18,7 @@ import Checklist from "./components/Reservations/Checklist.jsx"
 import EventList from "./Pages/Events/EventList.jsx";
 import AddEvent from "./Pages/Events/AddEvent.jsx"
 import UpdateEvent from "./Pages/Events/UpdateEvent.jsx"
+import Dashboard from "./components/Dashboards/Dashboard.jsx"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
@@ -41,6 +42,7 @@ function App() {
             <div className="p-10">
               <Routes>
                 <Route path="/" element={<ListReservation />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/ListReservation" element={<ListReservation />} />
                 <Route path="/SportCategorys" element={<SportCategorysList />} />
                 <Route path="/add-SportCategorys" element={<AddSportCategorys />} />
@@ -55,6 +57,7 @@ function App() {
                 <Route path="/update-sport/:id" element={<UpdateSport />} />
                 <Route path="/checklist/:id" element={<Checklist />} />
                 <Route path="/update-planning/:id" element={<UpdatePlanning />} />
+             
               </Routes>
             </div>
           </div>

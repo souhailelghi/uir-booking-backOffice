@@ -44,6 +44,15 @@ const Sidebar = () => {
                 </h2>
                 </Link>
                 <ul className="mt-3 space-y-2">
+                <li>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
+                    >
+                      <MdSupervisorAccount  className="text-gray-500" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/ListReservation"
