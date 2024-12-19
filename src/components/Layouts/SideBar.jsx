@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar ,FaSwatchbook , FaPassport} from "react-icons/fa";
+import { FaCalendarAlt, FaClipboard, FaUser, FaChartBar ,FaSwatchbook , FaPassport , FaThermometerFull } from "react-icons/fa";
 import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
-import { MdMeetingRoom, MdSupervisorAccount } from "react-icons/md";
+import { MdMeetingRoom, MdSupervisorAccount ,MdStarRate } from "react-icons/md";
 import UIRRLogo from "../../assets/UIRR.png";
 import "./Sidebar.css";
 
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -26,13 +26,10 @@ const Sidebar = () => {
             <div className="flex items-center justify-between px-4">
               <div className="flex items-center space-x-2">
               <Link to="/ListReservation" className="font-bold">
-        {/* <p>LOGO</p> */}
-        {/* <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full" /> */}
+  
         <img src={UIRRLogo} alt="UIRR Logo" className="h-8 w-auto rounded-full"  />
            </Link>
-                {/* <span className="text-2xl font-extrabold text-green">
-                  Logo
-                </span> */}
+            
               
               </div>
             </div>
@@ -49,7 +46,7 @@ const Sidebar = () => {
                       to="/dashboard"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
-                      <MdSupervisorAccount  className="text-gray-500" />
+                      <MdStarRate  className="text-gray-500" />
                       <span>Dashboard</span>
                     </Link>
                   </li>
@@ -85,49 +82,11 @@ const Sidebar = () => {
                       to="/event-list"
                       className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
                     >
-                      <FaSwatchbook className="text-gray-500" />
+                      <FaThermometerFull className="text-gray-500" />
                       <span>Les Events</span>
                     </Link>
                   </li>
-                  {/* <li>
-                    <Link
-                      to="/ExamResultsPage"
-                      className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
-                    >
-                      <FaClipboard className="text-gray-500" />
-                      <span>black list</span>
-                    </Link>
-                  </li> */}
-                  {/* <li>
-                    <Link
-                      to="/TestResultsPage"
-                      className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
-                    >
-                      <FaChartBar className="text-gray-500" />
-                      <span>User list</span>
-                    </Link>
-                  </li> */}
-                  {/* <li>
-                    <Link
-                      to="/ListTest"
-                      className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
-                    >
-                      <FaCalendarAlt className="text-gray-500" />
-                      <span>settings</span>
-                    </Link>
-                  </li> */}
 
-                
-                  {/* 
-                  <li>
-                    <Link
-                      to="/VaraintExam"
-                      className="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-md"
-                    >
-                      <FaCalendarAlt className="text-gray-500" />
-                      <span>Planing</span>
-                    </Link>
-                  </li> */}
                 </ul>
               </div>
             </nav>
