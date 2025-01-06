@@ -109,6 +109,7 @@ const AddEvent = () => {
       formData.append("lien", lien);
       formData.append("dateDepart", dateDepart);
       formData.append("dateFin", dateFin);
+console.log("date depart : ",dateDepart);
 
       const response = await ApiManager.post("/Event/add", formData, {
         headers: {

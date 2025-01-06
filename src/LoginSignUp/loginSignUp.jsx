@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./LoginSignUp.css";
-import { assets } from "../assets/assets";
 
+import { ClipLoader } from 'react-spinners'; 
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';  
 import { useNavigate } from 'react-router-dom';
 import ApiManager from "../api";
 
@@ -13,27 +14,21 @@ const LoginSignUp = ({ onLogin }) => {
   const [user, setUser] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
-  const handleNameChange = ({ target: { value } }) => {
-    setUser(value);
-  };
-  const handleEmailChange = ({ target: { value } }) => {
-    setEmail(value);
-  };
-
-  const handlePasswordChange = ({ target: { value } }) => {
-    setPassword(value);
-  };
+ 
   const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
+    setShowPassword(!showPassword);
   };
 
 
 
  
-  const handleLogin = async () => {
+  const handleSubmit  = async (e) => {
+    e.preventDefault();
     setError('');
+    setLoading(true); 
     // Input validation
     if (!email || !password) {
       setError("Please fill in all required fields.");
@@ -41,8 +36,8 @@ const LoginSignUp = ({ onLogin }) => {
     }
     try {
       const result = await ApiManager.post('https://localhost:7109/api/Account/login', {
-        email: email,
-        password: password,
+        email,
+        password,
       });
 
       const { token, userId, username , roles } = result.data;
@@ -81,60 +76,80 @@ const LoginSignUp = ({ onLogin }) => {
       } else {
         setError('Error: Request setup failed.');
       }
+    } finally {
+      setLoading(false); 
     }
   };
 
 
  
   return (
-    <div className='Main-container'>
-      <div className='Login-container'>
-        <div className='header'>
-          <div className='text'>Se connecter</div>
-          <div className='underline'></div>
-        </div>
-        <div className='inputs'>
+    <div className="flex justify-center items-center h-screen css-background">
+      <div className="bg-[#f8f9fc] lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 shadow-lg rounded-lg">
+      <h1 className="text-2xl font-semibold mb-4">Connexion</h1>
+  
       
-         
+      <form onSubmit={handleSubmit}>
       
-          <div className='input'>
-            <img src={assets.email} alt='email' />
+      <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-600">
+            Email
+          </label>
             <input
-              type="email"
-              id="txtEmail"
-              placeholder="Enter Email"
-              onChange={handleEmailChange}
-              required
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                autoComplete="off"
             />
           </div>
-          <div className='input'>
-            <img src={assets.password} alt='password' />
+
+
+
+
+          <div className="mb-4 relative">
+          <label htmlFor="password" className="block text-gray-800">
+            Mot de passe
+          </label>
+          <div className="relative">
+
+
             <input
+               id="password"
               type={showPassword ? "text" : "password"}
-              id="txtPassword"
-              placeholder="Enter Password"
-              onChange={handlePasswordChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 pr-10"
+              autoComplete="off"
             />
-            <button
-              type="button"
+            <div
+           
               onClick={togglePasswordVisibility}
-              className="password-toggle-btn"
-              aria-label="Toggle Password Visibility"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+              
             >
-              {showPassword ? "🙈" : "👁️"}
-            </button>
+              {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+            </div>
           </div>
-        </div>
-        {error && <div className='error-message'>{error}</div>}
-        <div className='submit-container'>
-          <div className={ "submit"} onClick={handleLogin}>
-         
-        
-            Se connecter
           </div>
-       
-        </div>
+   
+
+
+    
+        <button
+          type="submit"
+          disabled={loading}
+          className={`${
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1E3B8B] hover:bg-[#1E3B8B]/90"
+          } text-white font-semibold rounded-md py-2 px-4 w-full flex justify-center items-center`}
+        >
+          {loading ? <ClipLoader size={20} color="#ffffff" /> : "Se connecter"}
+        </button>
+        {error && <div  className="text-red-500 mt-2 text-center">{error}</div>}
+        </form>
       </div>
     </div>
   );

@@ -202,7 +202,7 @@ const EventList = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-center py-4">Aucun sport disponible.</p>
+          <p className="text-center py-4">Aucun event disponible.</p>
         )}
       </div>
 
